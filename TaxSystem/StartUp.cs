@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaxSystem.Data;
+using TaxSystem.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
 })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
@@ -41,6 +43,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.SeedRoles();
 
 app.MapControllerRoute(
     name: "default",
