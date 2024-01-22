@@ -21,7 +21,11 @@ namespace TaxSystem.Data
         [Required]
         public double RequiredHours { get; set; }
 
+        [Required]
         public ICollection<Desk> Desks { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
 
     }
 }

@@ -24,5 +24,8 @@ namespace TaxSystem.Data
         public ICollection<Service> Services { get; set; }
 
         public ICollection<Request> Requests { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

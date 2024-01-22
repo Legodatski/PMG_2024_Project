@@ -28,5 +28,8 @@ namespace TaxSystem.Data
         [Required]
         [ForeignKey(nameof(Desk))]
         public int DeskId { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; }
     }
 }

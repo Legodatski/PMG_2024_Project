@@ -7,12 +7,12 @@ using TaxSystem.Models.Users;
 namespace TaxSystem.Controllers
 {
     [Authorize]
-    public class UsersController : Controller
+    public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
 
-        public UsersController(
+        public UserController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager
             )
