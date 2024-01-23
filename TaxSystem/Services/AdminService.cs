@@ -37,12 +37,13 @@ namespace TaxSystem.Services
                 usersQuery.Add(new UserViewModel
                 {
                     Id = item.Id,
+                    UserName = item.UserName,
                     FirstName = item.FirstName,
                     LastName = item.LastName,
                     Email = item.Email,
                     PhoneNumber = item.PhoneNumber,
                     RoleName = curRole.Name
-                }); ;
+                });
             }
 
             if (roleName != null)

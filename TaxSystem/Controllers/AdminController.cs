@@ -54,6 +54,8 @@ namespace TaxSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditUserModel model)
         {
+            await _adminService.EditUser(model);
+
             return RedirectToAction(nameof(AllUsers));
         }
     }
