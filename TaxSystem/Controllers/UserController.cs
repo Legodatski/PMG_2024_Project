@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaxSystem.Data;
-using TaxSystem.Models.Users;
+using TaxSystem.Models.User;
 
 namespace TaxSystem.Controllers
 {
@@ -78,7 +78,7 @@ namespace TaxSystem.Controllers
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(user, "User");
-                return RedirectToAction("Login", "Users");
+                return RedirectToAction("Login", "User");
             }
 
             foreach (var item in result.Errors)

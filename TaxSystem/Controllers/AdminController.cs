@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
-using TaxSystem.Models.Users;
+using TaxSystem.Models.User;
 
 namespace TaxSystem.Controllers
 {
@@ -20,15 +20,41 @@ namespace TaxSystem.Controllers
 
         public async Task<IActionResult> AllUsers([FromQuery] AllUsersQueryModel query)
         {
-            var queryResult = await _adminService.GetAllUsers(
+            var queryResult = _adminService.GetAllUsers(
                 query.SearchTerm,
                 query.RoleName,
                 query.CurrentPage,
                 query.UsersPerPage);
 
-            query.Users = queryResult;
+            query.Users = await queryResult;
 
             return View(query);
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            ApplicationUser user = await _adminService.FindUser(id);
+            //to add if the user has a serviced issued
+
+            EditUserModel model = new EditUserModel
+            {
+                Id = id,
+                Username = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Roles = _adminService.GetAllRoles(),
+                RoleName = await _adminService.GetRoleNameByUserId(user.Id)
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditUserModel model)
+        {
+            return RedirectToAction(nameof(AllUsers));
         }
     }
 }

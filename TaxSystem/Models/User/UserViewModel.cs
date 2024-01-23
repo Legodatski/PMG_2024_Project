@@ -3,10 +3,13 @@ using TaxSystem.Extensions;
 
 namespace TaxSystem.Models.User
 {
-    public class RegisterModel
+    public class UserViewModel
     {
+        [Required]
+        public string Id { get; set; }
+
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
-        public string? Username { get; set; }
+        public string? UserName { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [EmailAddress]
@@ -26,19 +29,9 @@ namespace TaxSystem.Models.User
         public string? LastName { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
-        [DataType(DataType.Password)]
-        [MinLength(GlobalConstants.PasswordMinLenght)]
-        [MaxLength(GlobalConstants.PasswordMaxLenght)]
-        public string? Password { get; set; }
-
-        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
-        [DataType(DataType.Password)]
-        [Compare(nameof(Password))]
-        [Display(Name = "Confirm Password")]
-        public string? ConfirmPassword { get; set; }
-
-        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [Display(Name = "Phone Number")]
         public string? PhoneNumber { get; set; }
+
+        public string RoleName { get; set; }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using TaxSystem.Data;
 using static System.Reflection.Metadata.BlobBuilder;
 
-namespace TaxSystem.Models.Users
+namespace TaxSystem.Models.User
 {
     public class AllUsersQueryModel
     {
         public AllUsersQueryModel()
         {
-            Users = new HashSet<ApplicationUser>();
+            Users = new HashSet<UserViewModel>();
         }
 
         public  int UsersPerPage { get; set; } = 5;
@@ -18,7 +18,7 @@ namespace TaxSystem.Models.Users
 
         public string RoleName { get; set; } = null;
 
-        public IEnumerable<ApplicationUser> Users { get; set; }
+        public IEnumerable<UserViewModel> Users { get; set; }
 
     }
 }

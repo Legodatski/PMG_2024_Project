@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TaxSystem.Extensions;
 
-namespace TaxSystem.Models.Users
+namespace TaxSystem.Models.User
 {
     public class LoginModel
     {

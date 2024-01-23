@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
+using TaxSystem.Models.User;
 
 namespace TaxSystem.Services
 {
@@ -9,6 +10,7 @@ namespace TaxSystem.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext context;
+        private const string adminId = "35bbae7d-b2a0-472a-8137-e8df5f4ac614";
 
         public AdminService(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
@@ -16,18 +18,36 @@ namespace TaxSystem.Services
             this.context = context;
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetAllUsers(string? searchTerm = null, 
+        public async Task<IEnumerable<UserViewModel>> GetAllUsers(string? searchTerm = null, 
             string? roleName = null,
             int currentPage = 1,
             int usersPerPage = 5)
         {
-            IEnumerable<ApplicationUser> usersQuery = context.Users.Where(x => x.IsDeleted == false).AsQueryable();
+            var users = context.Users.Where(x => x.IsDeleted == false && x.Id != adminId).AsQueryable();
+            var roles = context.Roles.ToArray();
+            var userRoles = context.UserRoles.ToArray();
+
+            List<UserViewModel> usersQuery = new List<UserViewModel>();
+
+            foreach (var item in users)
+            {
+                var curUserRole = userRoles.FirstOrDefault(x => x.UserId == item.Id);
+                var curRole = roles.FirstOrDefault(x => x.Id == curUserRole.RoleId);
+
+                usersQuery.Add(new UserViewModel
+                {
+                    Id = item.Id,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    Email = item.Email,
+                    PhoneNumber = item.PhoneNumber,
+                    RoleName = curRole.Name
+                }); ;
+            }
 
             if (roleName != null)
             {
-                var usersWithRole = _userManager.GetUsersInRoleAsync(roleName).GetAwaiter().GetResult().ToList();
-
-                usersQuery = usersWithRole.Where(x => x.IsDeleted == false).ToList();
+                usersQuery = usersQuery.Where(x => x.RoleName == roleName).ToList();
             }
 
             if (searchTerm != null)
@@ -37,12 +57,52 @@ namespace TaxSystem.Services
                 usersQuery = usersQuery.Where(x => 
                 x.UserName.ToLower().Contains(lowerTerm) ||
                 x.FirstName.ToLower().Contains(lowerTerm) ||
-                x.LastName.ToLower().Contains(lowerTerm));
+                x.LastName.ToLower().Contains(lowerTerm)).ToList();
             }
 
-            var users = usersQuery.Skip((currentPage - 1) * usersPerPage).Take(usersPerPage);
+            var usersResult = usersQuery.Skip((currentPage - 1) * usersPerPage).Take(usersPerPage).AsQueryable();
 
-            return users;
+            return usersResult;
+        }
+
+        public async Task<ApplicationUser> FindUser(string id)
+            => await context.Users.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+
+        public async Task<string> GetRoleNameByUserId(string id)
+        {
+            var user = await FindUser(id);
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return roles.First();
+        }
+
+        public IEnumerable<IdentityRole> GetAllRoles()
+            => context.Roles;
+
+        public async Task EditUser(EditUserModel model)
+        {
+            var user = await FindUser(model.Id);
+
+            user.UserName = model.Username;
+            user.FirstName = model.FirstName;
+            user.LastName = user.LastName;
+            user.Email = model.Email;
+            user.PhoneNumber = model.PhoneNumber;
+
+            var toRemove = context.UserRoles.Where(x => x.UserId == model.Id).ToList();
+
+            context.UserRoles.RemoveRange(toRemove);
+
+            string roleId = context.Roles.FirstOrDefault(x => x.Name == model.RoleName).Id;
+
+            await context.UserRoles.AddAsync(new IdentityUserRole<string>
+            {
+                UserId = model.Id,
+                RoleId = roleId
+            });
+
+            await context.SaveChangesAsync();
         }
     }
 }
