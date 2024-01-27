@@ -72,6 +72,9 @@ else
                     <th>
                         <a asp-action="Edit" asp-route-id="@user.Id">Edit</a>
                     </th>
+                    <th>
+                        <a asp-action="Delete" asp-route-id="@user.Id" method="post">Delete</a>
+                    </th>
                 </tr>
             }
         </tbody>

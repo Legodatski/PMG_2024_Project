@@ -19,5 +19,7 @@ namespace TaxSystem.Contracts
         public Task<string> GetRoleNameByUserId(string id);
 
         public IEnumerable<IdentityRole> GetAllRoles();
+
+        public Task DeleteUser(string id);
     }
 }

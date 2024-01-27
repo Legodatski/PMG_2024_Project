@@ -58,5 +58,13 @@ namespace TaxSystem.Controllers
 
             return RedirectToAction(nameof(AllUsers));
         }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            await _adminService.DeleteUser(id);
+            //to add if the user has a serviced issued
+
+            return RedirectToAction(nameof(AllUsers));
+        }
     }
 }

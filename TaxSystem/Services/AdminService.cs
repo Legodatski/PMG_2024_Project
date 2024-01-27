@@ -105,5 +105,14 @@ namespace TaxSystem.Services
 
             await context.SaveChangesAsync();
         }
+
+        public async Task DeleteUser(string id)
+        {
+            var user = await context.Users.FindAsync(id);
+
+            user.IsDeleted = true;
+
+            await context.SaveChangesAsync();
+        }
     }
 }
