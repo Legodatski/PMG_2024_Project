@@ -7,6 +7,7 @@ namespace TaxSystem.Data
         public Service()
         {
             Desks = new List<Desk>();
+            IsDeleted = false;
         }
 
         [Key]

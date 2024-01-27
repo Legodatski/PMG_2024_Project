@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
 
@@ -20,7 +21,7 @@ namespace TaxSystem.Controllers
             return View();
         }
 
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Add()
         {
             Service service = new Service();
@@ -28,6 +29,7 @@ namespace TaxSystem.Controllers
             return View(service);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Add(Service input)
         {
