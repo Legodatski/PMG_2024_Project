@@ -44,6 +44,8 @@ namespace TaxSystem.Extensions
                     {
                         Id = "35bbae7d-b2a0-472a-8137-e8df5f4ac614",
                         FirstName = "Admin",
+                        PhoneNumber = "+359885778908",
+                        IsDeleted = false,
                         LastName = "Adminov",
                         Email = "admin1@gmail.com",
                         UserName = "Admin"
