@@ -1,6 +1,7 @@
 ﻿using NuGet.Packaging;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
+using TaxSystem.Models.Service;
 
 namespace TaxSystem.Services
 {
@@ -19,25 +20,35 @@ namespace TaxSystem.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Service>> GetAll(
+        public async Task<IEnumerable<ServiceViewModel>> GetAll(
             string? searchterm,  
             int currentPage = 1, 
             int usersPerPage = 5)
         {
             var services = context.Services.AsQueryable();
-            var deskServ = context.DeskServices;
-            var desks = context.Desks;
+            var deskServ = context.DeskServices.ToArray();
+            var workers = context.Workers
 
-            foreach (var service in services)
+            List<ServiceViewModel> viewModels = new List<ServiceViewModel>();
+
+            foreach (var s in services)
             {
-                var curDeskSer = deskServ.Where(x => x.ServiceId == service.Id);
-
-                foreach (var ds in curDeskSer)
+                var toAdd = new ServiceViewModel
                 {
-                    service.Desks.Add(desks.FirstOrDefault(x => x.Id == ds.DeskId));
+                    Id = s.Id,
+                    Name = s.Name,
+                    Description = s.Description,
+                    RequiredHours = s.RequiredHours
+                };
+
+                foreach (var d in deskServ)
+                {
+                    if (d.ServiceId == s.Id)
+                    {
+                        toAdd.DeskIds.Add(d.DeskId.ToString());
+                    }
                 }
             }
-
 
             if (searchterm != null)
             {

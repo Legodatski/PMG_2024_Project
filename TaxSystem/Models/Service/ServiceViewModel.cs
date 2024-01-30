@@ -4,6 +4,12 @@ namespace TaxSystem.Models.Service
 {
     public class ServiceViewModel
     {
+        public ServiceViewModel()
+        {
+            DeskIds = new List<string>();
+            WorkerNames = new List<string>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -17,6 +23,6 @@ namespace TaxSystem.Models.Service
 
         public List<string> DeskIds { get; set; }
 
-        public List<string> WorkerName { get; set; }
+        public List<string> WorkerNames { get; set; }
     }
 }

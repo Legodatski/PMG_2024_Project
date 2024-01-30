@@ -4,7 +4,7 @@
     {
         public AllServicesQueryModel()
         {
-            Services = new HashSet<TaxSystem.Data.Service>();
+            Services = new HashSet<ServiceViewModel>();
         }
 
         public int UsersPerPage { get; set; } = 5;
@@ -13,6 +13,6 @@
 
         public string SearchTerm { get; set; } = null;
 
-        public IEnumerable<TaxSystem.Data.Service> Services { get; set; }
+        public IEnumerable<ServiceViewModel> Services { get; set; }
     }
 }
