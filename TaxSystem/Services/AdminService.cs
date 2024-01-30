@@ -79,7 +79,7 @@ namespace TaxSystem.Services
         }
 
         public IEnumerable<IdentityRole> GetAllRoles()
-            => context.Roles;
+            => context.Roles.Where(x => x.Id != adminId);
 
         public async Task EditUser(EditUserModel model)
         {

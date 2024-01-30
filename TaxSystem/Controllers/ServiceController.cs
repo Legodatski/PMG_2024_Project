@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
+using TaxSystem.Models.Service;
 
 namespace TaxSystem.Controllers
 {
@@ -16,9 +17,16 @@ namespace TaxSystem.Controllers
             _service = service;
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All([FromQuery] AllServicesQueryModel query)
         {
-            return View();
+            var queryResult = _service.GetAll(
+                query.SearchTerm,
+                query.CurrentPage,
+                query.UsersPerPage);
+
+            query.Services = await queryResult;
+
+            return View(query);
         }
 
         [Authorize(Roles = "Admin")]

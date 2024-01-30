@@ -16,6 +16,8 @@ namespace TaxSystem.Data
 
         public DbSet<Service> Services { get; set; }
 
+        public DbSet<DeskServices> DeskServices { get; set; }
+
         protected override async void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -24,6 +26,9 @@ namespace TaxSystem.Data
                 .HasOne(x => x.Desk)
                 .WithMany(x => x.Requests)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<DeskServices>()
+                .HasKey(x => new { x.DeskId, x.ServiceId });
 
             AlterUser(builder);
         }

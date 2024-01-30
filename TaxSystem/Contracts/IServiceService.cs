@@ -8,7 +8,6 @@ namespace TaxSystem.Contracts
 
         public Task<IEnumerable<Service>> GetAll(
             string? searchterm,
-            string? roleName = null,
             int currentPage = 1,
             int usersPerPage = 5);
     }

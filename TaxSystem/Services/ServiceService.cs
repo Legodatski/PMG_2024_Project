@@ -1,4 +1,5 @@
-﻿using TaxSystem.Contracts;
+﻿using NuGet.Packaging;
+using TaxSystem.Contracts;
 using TaxSystem.Data;
 
 namespace TaxSystem.Services
@@ -19,12 +20,24 @@ namespace TaxSystem.Services
         }
 
         public async Task<IEnumerable<Service>> GetAll(
-            string? searchterm, 
-            string? roleName = null, 
+            string? searchterm,  
             int currentPage = 1, 
             int usersPerPage = 5)
         {
             var services = context.Services.AsQueryable();
+            var deskServ = context.DeskServices;
+            var desks = context.Desks;
+
+            foreach (var service in services)
+            {
+                var curDeskSer = deskServ.Where(x => x.ServiceId == service.Id);
+
+                foreach (var ds in curDeskSer)
+                {
+                    service.Desks.Add(desks.FirstOrDefault(x => x.Id == ds.DeskId));
+                }
+            }
+
 
             if (searchterm != null)
             {
