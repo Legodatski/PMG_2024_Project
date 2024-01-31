@@ -1,4 +1,7 @@
-﻿using NuGet.Packaging;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
 using TaxSystem.Models.Service;
@@ -8,10 +11,12 @@ namespace TaxSystem.Services
     public class ServiceService : IServiceService
     {
         private readonly ApplicationDbContext context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ServiceService(ApplicationDbContext context)
+        public ServiceService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             this.context = context;
+            _userManager = userManager;
         }
 
         public async Task Add(Service service)
@@ -25,11 +30,13 @@ namespace TaxSystem.Services
             int currentPage = 1, 
             int usersPerPage = 5)
         {
+
             var services = context.Services.AsQueryable();
             var deskServ = context.DeskServices.ToArray();
-            var workers = context.Workers
+            var workers = await _userManager.GetUsersInRoleAsync("Worker");
+            var desks = context.Desks.ToArray();
 
-            List<ServiceViewModel> viewModels = new List<ServiceViewModel>();
+            var viewModels = new List<ServiceViewModel>();
 
             foreach (var s in services)
             {
@@ -42,22 +49,32 @@ namespace TaxSystem.Services
                 };
 
                 foreach (var d in deskServ)
-                {
+                {                    
                     if (d.ServiceId == s.Id)
                     {
                         toAdd.DeskIds.Add(d.DeskId.ToString());
+
+                        var desk = desks.FirstOrDefault(x => x.Id == s.Id);
+                        var worker = workers.FirstOrDefault(x => x.Id == desk.WorkerId);
+
+                        toAdd.WorkerFirstNames.Add(worker.FirstName);
+                        toAdd.WorkerLastNames.Add(worker.LastName);
                     }
                 }
+
+                viewModels.Add(toAdd);
             }
 
             if (searchterm != null)
             {
-                services = services.Where(x => x.Name.ToLower().Contains(searchterm) || x.Description.ToLower().Contains(searchterm)).AsQueryable();
+                searchterm = searchterm.ToLower();
+
+                //viewModels = viewModels.Where(x => x.Name.ToLower().Contains(searchterm) || x.Description.ToLower().Contains(searchterm)).AsQueryable();
             }
 
-            var result = services.Skip((currentPage - 1) * usersPerPage).Take(usersPerPage).AsQueryable();
+            var result = viewModels.Skip((currentPage - 1) * usersPerPage).Take(usersPerPage).AsQueryable();
 
-            return result;
+            return viewModels;
         }
     }
 }

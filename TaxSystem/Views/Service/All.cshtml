@@ -55,10 +55,13 @@ else
                     </th>
 
                     <th>
-                        @foreach (var desk in s.Desks)
+                        @foreach (var id in s.DeskIds)
                         {
-                            @Html.DisplayFor(x => desk.Id)
-                            @Html.DisplayFor(x => desk.Worker.FirstName)
+                            @Html.DisplayFor(x => id);
+                        }
+                        @foreach (var item in s.WorkerFirstNames)
+                        {
+                            @Html.DisplayFor(x => item);
                         }
                     </th>
 

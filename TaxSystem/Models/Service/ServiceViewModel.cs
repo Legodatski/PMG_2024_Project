@@ -7,7 +7,8 @@ namespace TaxSystem.Models.Service
         public ServiceViewModel()
         {
             DeskIds = new List<string>();
-            WorkerNames = new List<string>();
+            WorkerFirstNames = new List<string>();
+            WorkerLastNames = new List<string>();
         }
 
         public int Id { get; set; }
@@ -23,6 +24,7 @@ namespace TaxSystem.Models.Service
 
         public List<string> DeskIds { get; set; }
 
-        public List<string> WorkerNames { get; set; }
+        public List<string> WorkerFirstNames { get; set; }
+        public List<string> WorkerLastNames { get; set; }
     }
 }
