@@ -10,11 +10,58 @@ namespace TaxSystem.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Discriminator",
+            migrationBuilder.AlterColumn<string>(
+                name: "UserName",
                 table: "AspNetUsers",
-                type: "nvarchar(21)",
-                maxLength: 21,
+                type: "nvarchar(256)",
+                maxLength: 256,
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "nvarchar(256)",
+                oldMaxLength: 256,
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "PhoneNumber",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Email",
+                table: "AspNetUsers",
+                type: "nvarchar(256)",
+                maxLength: 256,
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "nvarchar(256)",
+                oldMaxLength: 256,
+                oldNullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "FirstName",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsDeleted",
+                table: "AspNetUsers",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddColumn<string>(
+                name: "LastName",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
 
@@ -24,7 +71,8 @@ namespace TaxSystem.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    WorkerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    WorkerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,7 +93,8 @@ namespace TaxSystem.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RequiredHours = table.Column<double>(type: "float", nullable: false)
+                    RequiredHours = table.Column<double>(type: "float", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,21 +105,21 @@ namespace TaxSystem.Data.Migrations
                 name: "DeskService",
                 columns: table => new
                 {
-                    DesksId = table.Column<int>(type: "int", nullable: false),
-                    ServicesId = table.Column<int>(type: "int", nullable: false)
+                    DeskId = table.Column<int>(type: "int", nullable: false),
+                    ServiceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DeskService", x => new { x.DesksId, x.ServicesId });
+                    table.PrimaryKey("PK_DeskService", x => new { x.ServiceId, x.DeskId });
                     table.ForeignKey(
-                        name: "FK_DeskService_Desks_DesksId",
-                        column: x => x.DesksId,
+                        name: "FK_DeskService_Desks_DeskId",
+                        column: x => x.DeskId,
                         principalTable: "Desks",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DeskService_Services_ServicesId",
-                        column: x => x.ServicesId,
+                        name: "FK_DeskService_Services_ServiceId",
+                        column: x => x.ServiceId,
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -84,7 +133,8 @@ namespace TaxSystem.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ServiceId = table.Column<int>(type: "int", nullable: false),
-                    DeskId = table.Column<int>(type: "int", nullable: false)
+                    DeskId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,9 +165,9 @@ namespace TaxSystem.Data.Migrations
                 column: "WorkerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeskService_ServicesId",
+                name: "IX_DeskService_DeskId",
                 table: "DeskService",
-                column: "ServicesId");
+                column: "DeskId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Requests_ClientId",
@@ -151,8 +201,44 @@ namespace TaxSystem.Data.Migrations
                 name: "Services");
 
             migrationBuilder.DropColumn(
-                name: "Discriminator",
+                name: "FirstName",
                 table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "IsDeleted",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "LastName",
+                table: "AspNetUsers");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "UserName",
+                table: "AspNetUsers",
+                type: "nvarchar(256)",
+                maxLength: 256,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(256)",
+                oldMaxLength: 256);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "PhoneNumber",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Email",
+                table: "AspNetUsers",
+                type: "nvarchar(256)",
+                maxLength: 256,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(256)",
+                oldMaxLength: 256);
         }
     }
 }

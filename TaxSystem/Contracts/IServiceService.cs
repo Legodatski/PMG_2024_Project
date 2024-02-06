@@ -11,5 +11,11 @@ namespace TaxSystem.Contracts
             string? searchterm,
             int currentPage = 1,
             int usersPerPage = 5);
+
+        public Task Edit(Service model);
+
+        public Task<Service> GetService(int id);
+
+        public Task Delete(int id);
     }
 }

@@ -1,0 +1,38 @@
+﻿@model Service
+@{
+    ViewData["Title"] = "Edit Service";
+}
+
+
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form id="editForm" method="post">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-floating">
+                <input asp-for="Name" class="form-control" aria-required="true" />
+                <label asp-for="Name">Name</label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Description" class="form-control" aria-required="true" />
+                <label asp-for="Description">Description</label>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="RequiredHours" class="form-control" aria-required="true" />
+                <label asp-for="RequiredHours"></label>
+                <span asp-validation-for="RequiredHours" class="text-danger"></span>
+            </div>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

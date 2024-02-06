@@ -12,8 +12,8 @@ using TaxSystem.Data;
 namespace TaxSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240130153600_addedTable")]
-    partial class addedTable
+    [Migration("20240206162204_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,21 +24,6 @@ namespace TaxSystem.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DeskService", b =>
-                {
-                    b.Property<int>("DesksId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ServicesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DesksId", "ServicesId");
-
-                    b.HasIndex("ServicesId");
-
-                    b.ToTable("DeskService");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -278,19 +263,19 @@ namespace TaxSystem.Data.Migrations
                     b.ToTable("Desks");
                 });
 
-            modelBuilder.Entity("TaxSystem.Data.DeskServices", b =>
+            modelBuilder.Entity("TaxSystem.Data.DeskService", b =>
                 {
-                    b.Property<int>("DeskId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
-                    b.HasKey("DeskId", "ServiceId");
+                    b.Property<int>("DeskId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ServiceId");
+                    b.HasKey("ServiceId", "DeskId");
 
-                    b.ToTable("DeskServices");
+                    b.HasIndex("DeskId");
+
+                    b.ToTable("DeskService");
                 });
 
             modelBuilder.Entity("TaxSystem.Data.Request", b =>
@@ -350,21 +335,6 @@ namespace TaxSystem.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Services");
-                });
-
-            modelBuilder.Entity("DeskService", b =>
-                {
-                    b.HasOne("TaxSystem.Data.Desk", null)
-                        .WithMany()
-                        .HasForeignKey("DesksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaxSystem.Data.Service", null)
-                        .WithMany()
-                        .HasForeignKey("ServicesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -429,16 +399,16 @@ namespace TaxSystem.Data.Migrations
                     b.Navigation("Worker");
                 });
 
-            modelBuilder.Entity("TaxSystem.Data.DeskServices", b =>
+            modelBuilder.Entity("TaxSystem.Data.DeskService", b =>
                 {
                     b.HasOne("TaxSystem.Data.Desk", "Desk")
-                        .WithMany()
+                        .WithMany("Services")
                         .HasForeignKey("DeskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TaxSystem.Data.Service", "Service")
-                        .WithMany()
+                        .WithMany("Desks")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -478,6 +448,13 @@ namespace TaxSystem.Data.Migrations
             modelBuilder.Entity("TaxSystem.Data.Desk", b =>
                 {
                     b.Navigation("Requests");
+
+                    b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("TaxSystem.Data.Service", b =>
+                {
+                    b.Navigation("Desks");
                 });
 #pragma warning restore 612, 618
         }

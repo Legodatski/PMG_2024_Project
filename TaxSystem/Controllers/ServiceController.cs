@@ -45,5 +45,30 @@ namespace TaxSystem.Controllers
 
             return RedirectToAction(nameof(All));
         }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model = await _service.GetService(id);
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> Edit(Service input)
+        {
+            await _service.Edit(input);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _service.Delete(id);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

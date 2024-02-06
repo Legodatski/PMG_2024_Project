@@ -6,7 +6,7 @@ namespace TaxSystem.Data
     {
         public Service()
         {
-            Desks = new List<Desk>();
+            Desks = new List<DeskService>();
             IsDeleted = false;
         }
 
@@ -23,7 +23,7 @@ namespace TaxSystem.Data
         public double RequiredHours { get; set; }
 
         [Required]
-        public ICollection<Desk> Desks { get; set; }
+        public ICollection<DeskService> Desks { get; set; }
 
         [Required]
         public bool IsDeleted { get; set; }

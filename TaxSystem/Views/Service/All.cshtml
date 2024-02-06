@@ -10,9 +10,15 @@
     <div class="col-md-3">
         <div class="form-group mt-4 p-2"> <input type="submit" value="Търси" class="btn btn-primary" /></div>
     </div>
-    </div>
-
 </form>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Add">Create New</a>
+    </p>    
+}
+
 
 @{
     var previousPage = Model.CurrentPage - 1;
@@ -27,7 +33,6 @@
 
 @if (Model.Services.Count() == 0)
 {
-    <div>Няма подходящи книги за теб.</div>
 }
 else
 {
@@ -37,7 +42,14 @@ else
                 <th>Name</th>
                 <th>Description</th>
                 <th>required Hours</th>
-                <th></th>
+                <th>Desk and Worker</th>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <th></th>
+                    <th></th>
+                }
+
             </tr>
         </thead>
         <tbody>
@@ -65,12 +77,16 @@ else
                         }
                     </th>
 
-                    <th>
-                        <a asp-action="Edit" asp-route-id="@s.Id">Edit</a>
-                    </th>
-                    <th>
-                        <a asp-action="Delete" asp-route-id="@s.Id" method="post">Delete</a>
-                    </th>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <th>
+                            <a asp-action="Edit" asp-route-id="@s.Id">Edit</a>
+                        </th>
+                        <th>
+                            <a asp-action="Delete" asp-route-id="@s.Id" method="post">Delete</a>
+                        </th>                        
+                    }
+
                 </tr>
             }
         </tbody>
