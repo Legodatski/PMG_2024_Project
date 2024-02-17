@@ -2,7 +2,7 @@
 
 namespace TaxSystem.Data
 {
-    public class DeskService
+    public class DesksServices
     {
         [ForeignKey(nameof(Desk))]
         public int DeskId { get; set; }

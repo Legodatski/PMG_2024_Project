@@ -26,6 +26,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IRequestService, RequestService>();
+builder.Services.AddScoped<IDeskService, DeskService>();
 
 var app = builder.Build();
 

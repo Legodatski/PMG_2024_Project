@@ -1,0 +1,30 @@
+﻿@model AddDeskViewModel
+@{
+    ViewData["Title"] = "Add Service";
+}
+
+
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <form id="addForm" method="post">
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label>Role</label>
+            <select asp-for="" class="form-control">
+                @foreach (var r in Model.Roles)
+                {
+                    <option value="@r">@r.Name</option>
+                }
+            </select>
+
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

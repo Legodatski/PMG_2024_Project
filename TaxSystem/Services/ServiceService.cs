@@ -44,7 +44,7 @@ namespace TaxSystem.Services
             {
                 service.Name = model.Name;
                 service.Description = model.Description;
-                service.RequiredHours = model.RequiredHours;
+                service.RequiredMinutes = model.RequiredMinutes;
 
                 await context.SaveChangesAsync();
             }
@@ -70,7 +70,7 @@ namespace TaxSystem.Services
                      Id = s.Id,
                      Name = s.Name,
                      Description = s.Description,
-                     RequiredHours = s.RequiredHours
+                     RequiredHours = s.RequiredMinutes
                  };
 
                  foreach (var d in deskServ)
