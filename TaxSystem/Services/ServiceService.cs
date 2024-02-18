@@ -99,7 +99,7 @@ namespace TaxSystem.Services
 
              var result = viewModels.Skip((currentPage - 1) * usersPerPage).Take(usersPerPage).AsQueryable();
 
-             return viewModels;
+             return result;
         }
 
         public async Task<Service> GetService(int id)

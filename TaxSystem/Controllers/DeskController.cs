@@ -1,36 +1,56 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
+using TaxSystem.Models.DeskModels;
 
 namespace TaxSystem.Controllers
 {
     public class DeskController : Controller
     {
-        private IDeskService deskService;
+        private IDeskService _deskService;
 
-        public DeskController(IDeskService _deskService)
+        public DeskController(IDeskService deskService)
         {
-            deskService = _deskService;
+            _deskService = deskService;
         }
 
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery] AllDesksQueryModel query)
         {
-            return View();
+            var queryResult = _deskService.GetAllDesks(
+                query.SearchTerm,
+                query.CurrentPage, 
+                query.DesksPerPage);
+
+            query.Desks = await queryResult;
+
+            return View(query);
         }
 
-        public IActionResult Add()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Add()
         {
-            Desk model = new Desk();
+            AddDeskViewModel model = new AddDeskViewModel();
+
+            var workers = await _deskService.GetAllWorkersWithoutDesks();
+
+            model.AllWorkers = workers.ToList();
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(Desk model)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Add(AddDeskViewModel model)
         {
-            await deskService.Add(model);
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
 
-            return RedirectToAction(nameof(Add));
+            await _deskService.Add(model);
+
+            return RedirectToAction(nameof(All));
         }
     }
 }
