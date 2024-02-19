@@ -257,7 +257,7 @@ namespace TaxSystem.Data.Migrations
 
                     b.HasIndex("WorkerId");
 
-                    b.ToTable("Desks");
+                    b.ToTable("Desks", (string)null);
                 });
 
             modelBuilder.Entity("TaxSystem.Data.DeskService", b =>
@@ -272,7 +272,7 @@ namespace TaxSystem.Data.Migrations
 
                     b.HasIndex("DeskId");
 
-                    b.ToTable("DeskService");
+                    b.ToTable("DeskService", (string)null);
                 });
 
             modelBuilder.Entity("TaxSystem.Data.Request", b =>
@@ -304,7 +304,7 @@ namespace TaxSystem.Data.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("Requests");
+                    b.ToTable("Requests", (string)null);
                 });
 
             modelBuilder.Entity("TaxSystem.Data.Service", b =>
@@ -331,7 +331,7 @@ namespace TaxSystem.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

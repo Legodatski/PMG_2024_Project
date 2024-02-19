@@ -5,6 +5,11 @@ namespace TaxSystem.Models.DeskModels
 {
     public class AddDeskViewModel
     {
+        public AddDeskViewModel()
+        {
+            AllWorkers = new HashSet<ApplicationUser>();
+        }
+
         [Required]
         public string WorkerId { get; set; }
 

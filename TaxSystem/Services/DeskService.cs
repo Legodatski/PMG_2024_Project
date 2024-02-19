@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
@@ -92,6 +93,29 @@ namespace TaxSystem.Services
             }
 
             return false;
+        }
+
+        public async Task AddDeskService(int deskId, string serviceName)
+        {
+            var service = await _context.Services.FirstOrDefaultAsync(x => x.Name == serviceName);
+            var desk = await _context.Desks.FirstOrDefaultAsync(x => x.Id == deskId);
+
+
+            if (service != null)
+            {
+                DesksServices deskService = new DesksServices()
+                {
+                    DeskId = deskId,
+                    ServiceId = service.Id,
+                };
+
+                if (!_context.DeskService.Contains(deskService))
+                {
+                    await _context.DeskService.AddAsync(deskService);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
         }
     }
 }

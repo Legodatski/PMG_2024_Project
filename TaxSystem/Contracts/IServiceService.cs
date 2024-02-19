@@ -14,6 +14,8 @@ namespace TaxSystem.Contracts
 
         public Task Edit(Service model);
 
+        public IEnumerable<string> GetServiceNames();
+
         public Task<Service> GetService(int id);
 
         public Task Delete(int id);

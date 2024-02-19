@@ -41,14 +41,12 @@ else
                 <th>Id</th>
                 <th>Worker First Name</th>
                 <th>Worker Last Name</th>
-                <th></th>
-                <th>Desk and Worker</th>
 
-                @if (User.IsInRole("Admin"))
-                {
-                    <th></th>
-                    <th></th>
-                }
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
 
             </tr>
         </thead>
@@ -69,19 +67,23 @@ else
                     <th>
                         @foreach (var service in s.Services)
                         {
-                            @Html.DisplayFor(x => service.Service.Name);
+                            @Html.DisplayFor(x => service.Service.Name)
+                            ;
                         }
                     </th>
 
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <th>
-                            <a asp-action="Edit" asp-route-id="@s.Id">Edit</a>
-                        </th>
-                        <th>
-                            <a asp-action="Delete" asp-route-id="@s.Id" method="post">Delete</a>
-                        </th>
-                    }
+                    <th>
+                        <a asp-action="AddDeskService" asp-route-id="@s.Id">Add Service</a>
+                    </th>
+                    <th>
+                        <a asp-action="RemoveDeskService" asp-route-id="@s.Id" method="post">Remove Service</a>
+                    </th>
+                    <th>
+                        <a asp-action="Edit" asp-route-id="@s.Id">Edit</a>
+                    </th>
+                    <th>
+                        <a asp-action="Delete" asp-route-id="@s.Id" method="post">Delete</a>
+                    </th>
 
                 </tr>
             }

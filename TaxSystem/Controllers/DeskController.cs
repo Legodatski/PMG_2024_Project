@@ -1,17 +1,24 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Web;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.DotNet.Scaffolding.Shared.Project;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
 using TaxSystem.Models.DeskModels;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace TaxSystem.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DeskController : Controller
     {
         private IDeskService _deskService;
+        private IServiceService _service;
 
-        public DeskController(IDeskService deskService)
+        public DeskController(IDeskService deskService, IServiceService service)
         {
+            _service = service;
             _deskService = deskService;
         }
 
@@ -27,7 +34,6 @@ namespace TaxSystem.Controllers
             return View(query);
         }
 
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add()
         {
             AddDeskViewModel model = new AddDeskViewModel();
@@ -40,7 +46,6 @@ namespace TaxSystem.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add(AddDeskViewModel model)
         {
             if (!ModelState.IsValid)
@@ -49,6 +54,32 @@ namespace TaxSystem.Controllers
             }
 
             await _deskService.Add(model);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        public IActionResult AddDeskService(int Id)
+        {
+            var model = new AddDeskServiceViewModel();
+            model.DeskId = Id;
+            model.AllServiceNames = _service.GetServiceNames();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDeskService(AddDeskServiceViewModel model)
+        {
+            var url = Request.GetDisplayUrl();
+            var deskId = int.Parse(url.Last().ToString());
+            model.DeskId = deskId;
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            await _deskService.AddDeskService(model.DeskId, model.ServiceName);
 
             return RedirectToAction(nameof(All));
         }

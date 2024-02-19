@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Serialization;
 
 namespace TaxSystem.Data
 {
@@ -18,7 +19,7 @@ namespace TaxSystem.Data
 
         public DbSet<DesksServices> DeskService { get; set; }
 
-        protected override async void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
@@ -29,6 +30,11 @@ namespace TaxSystem.Data
 
             builder.Entity<DesksServices>()
                 .HasKey(x => new { x.ServiceId, x.DeskId });
+
+            builder.Entity<DesksServices>()
+                .HasOne(x => x.Desk)
+                .WithMany(x => x.Services)
+                .HasForeignKey(x => x.DeskId);
 
             AlterUser(builder);
         }
