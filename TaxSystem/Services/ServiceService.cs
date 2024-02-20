@@ -63,7 +63,6 @@ namespace TaxSystem.Services
 
             var viewModels = new List<ServiceViewModel>();
 
-            //to optimize
             foreach (var s in services)
             {
                 var toAdd = new ServiceViewModel
@@ -74,22 +73,14 @@ namespace TaxSystem.Services
                     RequiredHours = s.RequiredMinutes,
                 };
 
-                foreach (var d in deskServ)
-                {
-                    if (d.ServiceId == s.Id)
-                    {
-                        toAdd.DeskIds.Add(d.DeskId.ToString());
+                var desksIds = s.Desks.Select(x => x.DeskId.ToString()).ToList();
+                toAdd.DeskIds = desksIds;
+                
+                var workerFirstNames = s.Desks.Select(x => x.Desk.Worker.FirstName).ToList();
+                toAdd.WorkerFirstNames = workerFirstNames;
 
-                        //tuk nestho mn tejko se e ostralo
-                        /*
-                        var desk = desks.FirstOrDefault(x => x.Id == s.Id);
-                        var worker = workers.FirstOrDefault(x => x.Id == desk.WorkerId);
-
-                        toAdd.WorkerFirstNames.Add(worker.FirstName);
-                        toAdd.WorkerLastNames.Add(worker.LastName);
-                        */
-                    }
-                }
+                var workerLastNames = s.Desks.Select(x => x.Desk.Worker.LastName).ToList();
+                toAdd.WorkerLastNames = workerLastNames;
 
                 viewModels.Add(toAdd);
             }
