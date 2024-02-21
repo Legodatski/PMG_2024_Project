@@ -16,7 +16,7 @@
 {
     <p>
         <a asp-action="Add">Create New</a>
-    </p>    
+    </p>
 }
 
 
@@ -42,8 +42,10 @@ else
             <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th>required Hours</th>
-                <th>Desk and Worker</th>
+                <th>Required Minutes</th>
+                <th>Desk</th>
+                <th>Worker First Name</th>
+                <th>Worker Last Name</th>
 
                 @if (User.IsInRole("Admin"))
                 {
@@ -70,11 +72,25 @@ else
                     <th>
                         @foreach (var id in s.DeskIds)
                         {
-                            @Html.DisplayFor(x => id);
+                            @Html.DisplayFor(x => id)
+                            ;
                         }
+                    </th>
+
+                    <th>
+
                         @foreach (var item in s.WorkerFirstNames)
                         {
-                            @Html.DisplayFor(x => item);
+                            @Html.DisplayFor(x => item)
+                            ;
+                        }
+                    </th>
+
+                    <th>
+                        @foreach (var item in s.WorkerLastNames)
+                        {
+                            @Html.DisplayFor(x => item)
+                            ;
                         }
                     </th>
 
@@ -85,7 +101,7 @@ else
                         </th>
                         <th>
                             <a asp-action="Delete" asp-route-id="@s.Id" method="post">Delete</a>
-                        </th>                        
+                        </th>
                     }
 
                 </tr>

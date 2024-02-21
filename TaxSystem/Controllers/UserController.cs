@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using TaxSystem.Contracts;
 using TaxSystem.Data;
+using TaxSystem.Models.Requests;
 using TaxSystem.Models.User;
+using TaxSystem.Services;
 
 namespace TaxSystem.Controllers
 {
@@ -11,14 +14,17 @@ namespace TaxSystem.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private IRequestService requestService;
 
         public UserController(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager
+            SignInManager<ApplicationUser> signInManager,
+            IRequestService _requestService
             )
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            requestService = _requestService;
 
         }
 
@@ -89,10 +95,38 @@ namespace TaxSystem.Controllers
             return View(model);
         }
 
+        public IActionResult RequestSer()
+        {
+            var model = new AddRequestViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RequestSer(AddRequestViewModel model)
+        {
+            var user = User.Identity as ApplicationUser;
+
+            if (user == null || !ModelState.IsValid)
+            {
+                return View(new AddRequestViewModel());
+            }
+
+            model.UserId = user.Id;      
+            
+            await requestService.Add(model);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult MyServices()
+        {
+            return View();
         }
     }
 }

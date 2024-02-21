@@ -1,17 +1,21 @@
-﻿namespace TaxSystem.Models.Requests
+﻿
+using System.ComponentModel.DataAnnotations;
+
+namespace TaxSystem.Models.Requests
 {
     public class AddRequestViewModel
     {
         public AddRequestViewModel()
         {
-            Services = new HashSet<Data.Service>();
+            Services = new HashSet<string>();
         }
 
         public string UserId { get; set; }
 
-        public int ServiceId { get; set; }
+        [Required]
+        public string ServiceName { get; set; }
 
-        public IEnumerable<Data.Service> Services { get; set; }
+        public IEnumerable<string> Services { get; set; }
 
     }
 }

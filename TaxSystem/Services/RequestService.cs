@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
 using TaxSystem.Models.Requests;
@@ -8,19 +9,35 @@ namespace TaxSystem.Services
     public class RequestService : IRequestService
     {
         private readonly ApplicationDbContext context;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RequestService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public RequestService(ApplicationDbContext context)
         {
             this.context = context;
-            _userManager = userManager;
         }
 
         public async Task Add(AddRequestViewModel model)
         {
             var client = await context.Users.FindAsync(model.UserId);
-            var service = await context.Services.FindAsync(model.ServiceId);
-            var desksServices = context.DeskService.Where(x => x.ServiceId == model.ServiceId);
+            var service = await context.Services.FirstOrDefaultAsync(x => x.Name == model.ServiceName);
+            var desks = context.DeskService.Where(x => x.Service == service).Select(y => y.Desk);
+
+            desks = desks.OrderBy(x => x.Services.Count());
+
+            var desk = desks.First();
+
+            var request = new Request()
+            {
+                Desk = desk,
+                DeskId = desk.Id,
+                Client = client,
+                ClientId = client.Id,
+                Service = service,
+                ServiceId = service.Id,
+                IsDeleted = false
+            };
+
+            await context.Requests.AddAsync(request);
+            await context.SaveChangesAsync();
         }
     }
 }
