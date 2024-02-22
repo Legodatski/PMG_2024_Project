@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using TaxSystem.Data;
 
 namespace TaxSystem.Models.Requests
 {
@@ -10,7 +11,7 @@ namespace TaxSystem.Models.Requests
             Services = new HashSet<string>();
         }
 
-        public string UserId { get; set; }
+        public ApplicationUser? User { get; set; }
 
         [Required]
         public string ServiceName { get; set; }

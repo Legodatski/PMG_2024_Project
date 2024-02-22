@@ -70,7 +70,7 @@ namespace TaxSystem.Services
                     Id = s.Id,
                     Name = s.Name,
                     Description = s.Description,
-                    RequiredHours = s.RequiredMinutes,
+                    RequiredMinutes = s.RequiredMinutes,
                 };
 
                 var desksIds = s.Desks.Select(x => x.DeskId.ToString()).ToList();

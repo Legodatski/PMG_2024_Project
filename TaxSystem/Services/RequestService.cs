@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
+using System.ComponentModel.Design.Serialization;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
 using TaxSystem.Models.Requests;
@@ -17,7 +19,6 @@ namespace TaxSystem.Services
 
         public async Task Add(AddRequestViewModel model)
         {
-            var client = await context.Users.FindAsync(model.UserId);
             var service = await context.Services.FirstOrDefaultAsync(x => x.Name == model.ServiceName);
             var desks = context.DeskService.Where(x => x.Service == service).Select(y => y.Desk);
 
@@ -25,19 +26,60 @@ namespace TaxSystem.Services
 
             var desk = desks.First();
 
+            var requests = context.Requests.Where(x => x.DeskId == desk.Id);
+
+            TimeOnly time = new TimeOnly();
+
+            if (requests.Any())
+            {
+                requests.OrderByDescending(x => StringToTime(x.Time));
+
+                string tInput = requests.First().Time;
+
+                time = StringToTime(tInput);
+
+                time = time.AddMinutes(double.Parse(service.RequiredMinutes));
+                time = time.AddMinutes(5);
+            }
+            else
+            {
+                time = new TimeOnly(8, 0);
+            }
+
+            if(time.Hour == 12)
+            {
+                time = new TimeOnly(13, 0);
+            }
+
+            if (time.Hour >= 17)
+            {
+                //throw exception
+            }
+
             var request = new Request()
             {
                 Desk = desk,
                 DeskId = desk.Id,
-                Client = client,
-                ClientId = client.Id,
+                Client = model.User,
+                ClientId = model.User.Id,
                 Service = service,
                 ServiceId = service.Id,
-                IsDeleted = false
+                IsDeleted = false,
+                IsCompleted = false,
+                Time = time.ToString(),
             };
 
             await context.Requests.AddAsync(request);
             await context.SaveChangesAsync();
+        }
+
+        private TimeOnly StringToTime(string str)
+        {
+            var input = str.Split(new char[] { ',', ' ', ':', '.' }, StringSplitOptions.RemoveEmptyEntries);
+
+            var time = new TimeOnly(int.Parse(input[0]), int.Parse(input[1]));
+
+            return time;
         }
     }
 }

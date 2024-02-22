@@ -5,7 +5,7 @@ using TaxSystem.Contracts;
 using TaxSystem.Data;
 using TaxSystem.Models.Requests;
 using TaxSystem.Models.User;
-using TaxSystem.Services;
+using System.Web;
 
 namespace TaxSystem.Controllers
 {
@@ -15,17 +15,19 @@ namespace TaxSystem.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private IRequestService requestService;
+        private IServiceService service;
 
         public UserController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IRequestService _requestService
+            IRequestService _requestService,
+            IServiceService _service
             )
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             requestService = _requestService;
-
+            service = _service;
         }
 
         [AllowAnonymous]
@@ -98,21 +100,24 @@ namespace TaxSystem.Controllers
         public IActionResult RequestSer()
         {
             var model = new AddRequestViewModel();
+            model.Services = service.GetServiceNames();
             return View(model);
         }
 
         [HttpPost]
         public async Task<IActionResult> RequestSer(AddRequestViewModel model)
         {
-            var user = User.Identity as ApplicationUser;
+            var userName = HttpContext.User.Identity.Name;
 
-            if (user == null || !ModelState.IsValid)
+            var User = await userManager.FindByNameAsync(userName);
+
+            if (User == null || !ModelState.IsValid)
             {
-                return View(new AddRequestViewModel());
+                throw new Exception();
             }
 
-            model.UserId = user.Id;      
-            
+            model.User = User;
+
             await requestService.Add(model);
 
             return RedirectToAction("Index", "Home");

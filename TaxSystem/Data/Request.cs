@@ -23,6 +23,9 @@ namespace TaxSystem.Data
         public int ServiceId { get; set; }
 
         [Required]
+        public string Time { get; set; }
+
+        [Required]
         public Desk Desk { get; set; }
 
         [Required]
@@ -31,5 +34,8 @@ namespace TaxSystem.Data
 
         [Required]
         public bool IsDeleted { get; set; }
+
+        [Required]
+        public bool IsCompleted { get; set; }
     }
 }

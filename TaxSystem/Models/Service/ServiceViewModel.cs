@@ -20,7 +20,7 @@ namespace TaxSystem.Models.Service
         public string Description { get; set; }
 
         [Required]
-        public double RequiredHours { get; set; }
+        public string RequiredMinutes { get; set; }
 
         public List<string> DeskIds { get; set; }
 

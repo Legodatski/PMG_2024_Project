@@ -20,7 +20,7 @@ namespace TaxSystem.Data
         public string Description { get; set; }
 
         [Required]
-        public double RequiredMinutes { get; set; }
+        public string RequiredMinutes { get; set; }
 
         [Required]
         public ICollection<DesksServices> Desks { get; set; }
