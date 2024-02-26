@@ -40,20 +40,19 @@ namespace TaxSystem.Services
 
                 time = time.AddMinutes(double.Parse(service.RequiredMinutes));
                 time = time.AddMinutes(5);
+
+                if (time.Hour == 12)
+                {
+                    time = new TimeOnly(13, 0);
+                }
+                else if (time.Hour >= 17)
+                {
+                    //throw exception
+                }
             }
             else
             {
                 time = new TimeOnly(8, 0);
-            }
-
-            if(time.Hour == 12)
-            {
-                time = new TimeOnly(13, 0);
-            }
-
-            if (time.Hour >= 17)
-            {
-                //throw exception
             }
 
             var request = new Request()
@@ -71,6 +70,27 @@ namespace TaxSystem.Services
 
             await context.Requests.AddAsync(request);
             await context.SaveChangesAsync();
+        }
+
+        public IEnumerable<Request> GetUserRequest(
+            ApplicationUser user, 
+            bool? completed = null)
+        {
+            var services = context.Services.ToArray();
+            var desks = context.Desks.ToArray();
+            var requests = context.Requests.Where(x => x.ClientId == user.Id).ToArray();
+
+
+            if (completed == false)
+            {
+                requests = requests.Where(x => x.IsCompleted == false).ToArray();
+            }
+            else if(completed == true)
+            {
+                requests = requests.Where(x => x.IsCompleted == true).ToArray();
+            }
+
+            return requests;
         }
 
         private TimeOnly StringToTime(string str)

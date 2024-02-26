@@ -109,7 +109,7 @@ namespace TaxSystem.Controllers
         {
             var userName = HttpContext.User.Identity.Name;
 
-            var User = await userManager.FindByNameAsync(userName);
+            var User = await GetCurrentUser();
 
             if (User == null || !ModelState.IsValid)
             {
@@ -123,15 +123,28 @@ namespace TaxSystem.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public async Task<IActionResult> All(bool? completed)
+        {
+            var user = await GetCurrentUser();
+
+            var model = requestService.GetUserRequest(user, completed);
+
+            return View(model);
+        }
+
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult MyServices()
+        private async Task<ApplicationUser> GetCurrentUser()
         {
-            return View();
+            var userName = HttpContext.User.Identity.Name;
+
+            var User = await userManager.FindByNameAsync(userName);
+
+            return User;
         }
     }
 }
