@@ -1,0 +1,60 @@
+﻿@model IEnumerable<TaxSystem.Data.Request>
+
+@{
+    ViewData["Title"] = "RequestsByWorker";
+}
+
+<h1> @ViewData["Title"] </h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Client.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Client.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsCompleted)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Client.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Service.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsCompleted)
+            </td>
+            <td>
+                <a asp-action="Complete" asp-route-id="@item.Id" method="post">Complete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

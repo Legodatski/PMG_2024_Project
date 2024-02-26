@@ -29,7 +29,17 @@
                         <a class="nav-link" asp-controller="User" asp-action="RequestSer">Request a service</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="User" asp-action="All" asp-route-id="">All Requests</a>
+                        <a class="nav-link" asp-controller="User" asp-action="All">All Requests</a>
+                    </li>
+                }
+
+                @if (User.IsInRole("Worker"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Worker" asp-action="RequestsByWorker" asp-route-completed="true">Completed Requests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Worker" asp-action="RequestsByWorker" asp-route-completed="false">Not Completed Requests</a>
                     </li>
                 }
 

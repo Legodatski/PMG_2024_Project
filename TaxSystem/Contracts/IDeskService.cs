@@ -15,5 +15,7 @@ namespace TaxSystem.Contracts
         public Task<IEnumerable<ApplicationUser>> GetAllWorkersWithoutDesks();
 
         public Task AddDeskService(int deskId, string serviceName);
+
+        public Task<Desk> GetDeskByWorkerId(string id);
     }
 }

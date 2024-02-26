@@ -72,13 +72,31 @@ namespace TaxSystem.Services
             await context.SaveChangesAsync();
         }
 
-        public IEnumerable<Request> GetUserRequest(
+        public async Task Complete(int id)
+        {
+            var request = await context.Requests.FirstOrDefaultAsync(x => x.Id == id);
+            request.IsCompleted = true;
+            await context.SaveChangesAsync();
+        }
+
+        public async Task Delete(int id)
+        {
+            var request = await context.Requests.FirstOrDefaultAsync(x => x.Id == id);
+            var allrequests = context.Requests.Where(x => x.DeskId == request.DeskId).ToArray();
+            request.IsDeleted = true;
+
+
+
+            await context.SaveChangesAsync();
+        }
+
+        public IEnumerable<Request> GetUserRequests(
             ApplicationUser user, 
             bool? completed = null)
         {
             var services = context.Services.ToArray();
             var desks = context.Desks.ToArray();
-            var requests = context.Requests.Where(x => x.ClientId == user.Id).ToArray();
+            var requests = context.Requests.Where(x => x.ClientId == user.Id && x.IsDeleted == false).ToArray();
 
 
             if (completed == false)
@@ -86,6 +104,24 @@ namespace TaxSystem.Services
                 requests = requests.Where(x => x.IsCompleted == false).ToArray();
             }
             else if(completed == true)
+            {
+                requests = requests.Where(x => x.IsCompleted == true).ToArray();
+            }
+
+            return requests;
+        }
+
+        public IEnumerable<Request> GetWorkerRequests(int id, bool? completed = null)
+        {
+            var services = context.Services.ToArray();
+            var clients = context.Users.ToArray();
+            var requests = context.Requests.Where(x => x.DeskId == id && x.IsDeleted == false).ToArray();
+
+            if (completed == false)
+            {
+                requests = requests.Where(x => x.IsCompleted == false).ToArray();
+            }
+            else if (completed == true)
             {
                 requests = requests.Where(x => x.IsCompleted == true).ToArray();
             }

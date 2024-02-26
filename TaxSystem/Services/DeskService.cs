@@ -51,8 +51,8 @@ namespace TaxSystem.Services
         }
 
         public async Task<IEnumerable<Desk>> GetAllDesks(
-            string? searchTerm, 
-            int currentPage = 1, 
+            string? searchTerm,
+            int currentPage = 1,
             int desksPerPage = 5)
         {
             var allWorkers = await _userManager.GetUsersInRoleAsync(workerRoleName);
@@ -117,5 +117,9 @@ namespace TaxSystem.Services
             }
 
         }
+
+        public async Task<Desk> GetDeskByWorkerId(string id) 
+            => await _context.Desks.FirstOrDefaultAsync(x => x.WorkerId == id);
+
     }
 }

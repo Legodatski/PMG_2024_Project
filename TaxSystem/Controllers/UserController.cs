@@ -127,9 +127,16 @@ namespace TaxSystem.Controllers
         {
             var user = await GetCurrentUser();
 
-            var model = requestService.GetUserRequest(user, completed);
+            var model = requestService.GetUserRequests(user, completed);
 
             return View(model);
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await requestService.Delete(id);
+
+            return RedirectToAction(nameof(All));
         }
 
         public async Task<IActionResult> Logout()

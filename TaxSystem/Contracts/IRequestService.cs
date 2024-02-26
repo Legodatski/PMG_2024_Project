@@ -7,6 +7,12 @@ namespace TaxSystem.Contracts
     {
         public Task Add(AddRequestViewModel model);
 
-        public IEnumerable<Request> GetUserRequest(ApplicationUser user, bool? completed = null);
+        public IEnumerable<Request> GetUserRequests(ApplicationUser user, bool? completed = null);
+
+        public Task Delete(int id);
+
+        public Task Complete(int id);
+
+        public IEnumerable<Request> GetWorkerRequests(int id, bool? completed = null);
     }
 }
