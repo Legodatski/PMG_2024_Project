@@ -14,5 +14,7 @@ namespace TaxSystem.Contracts
         public Task Complete(int id);
 
         public IEnumerable<Request> GetWorkerRequests(int id, bool? completed = null);
+
+        public bool CheckIfUserHasRequests(string userId);
     }
 }

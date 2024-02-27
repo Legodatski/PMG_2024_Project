@@ -72,6 +72,8 @@ namespace TaxSystem.Services
             await context.SaveChangesAsync();
         }
 
+        public bool CheckIfUserHasRequests(string userId)
+            => context.Requests.Any(x => x.Client.Id == userId);
         public async Task Complete(int id)
         {
             var request = await context.Requests.FirstOrDefaultAsync(x => x.Id == id);
@@ -81,17 +83,29 @@ namespace TaxSystem.Services
 
         public async Task Delete(int id)
         {
-            var request = await context.Requests.FirstOrDefaultAsync(x => x.Id == id);
+            var services = await context.Services.Where(x => x.IsDeleted == false).ToArrayAsync();
+            var request = await context.Requests.Where(x => x.IsDeleted == false).FirstOrDefaultAsync(x => x.Id == id);
             var allrequests = context.Requests.Where(x => x.DeskId == request.DeskId).ToArray();
             request.IsDeleted = true;
+            var delTime = StringToTime(request.Time);
+            var serTime = double.Parse(request.Service.RequiredMinutes);
 
+            foreach (var r in allrequests)
+            {
+                var time = StringToTime(r.Time);
 
+                if (time > delTime)
+                {
+                    time = time.AddMinutes(-serTime);
+                    r.Time = time.ToString();
+                }
+            }
 
             await context.SaveChangesAsync();
         }
 
         public IEnumerable<Request> GetUserRequests(
-            ApplicationUser user, 
+            ApplicationUser user,
             bool? completed = null)
         {
             var services = context.Services.ToArray();
@@ -103,7 +117,7 @@ namespace TaxSystem.Services
             {
                 requests = requests.Where(x => x.IsCompleted == false).ToArray();
             }
-            else if(completed == true)
+            else if (completed == true)
             {
                 requests = requests.Where(x => x.IsCompleted == true).ToArray();
             }

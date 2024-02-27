@@ -10,11 +10,14 @@ namespace TaxSystem.Controllers
     public class AdminController : Controller
     {
         private readonly IAdminService _adminService;
+        private readonly IRequestService _requestService;
 
         public AdminController(
-            IAdminService adminService
+            IAdminService adminService,
+            IRequestService requestService
             )
         {
+            _requestService = requestService;
             _adminService = adminService;
         }
 
@@ -34,7 +37,11 @@ namespace TaxSystem.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             ApplicationUser user = await _adminService.FindUser(id);
-            //to add if the user has a serviced issued
+
+            if (_requestService.CheckIfUserHasRequests(user.Id))
+            {
+                return RedirectToAction(nameof(AllUsers));
+            }
 
             EditUserModel model = new EditUserModel
             {
