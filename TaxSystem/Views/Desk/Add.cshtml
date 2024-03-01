@@ -1,6 +1,6 @@
 ﻿@model AddDeskViewModel
 @{
-    ViewData["Title"] = "Add Desk";
+    ViewData["Title"] = "Добави бюро";
 }
 
 
@@ -12,7 +12,7 @@
         <form id="addForm" method="post">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <label>Worker</label>
+            <label asp-for="WorkerId"></label>
             <select asp-for="WorkerId" class="form-control">
                 @foreach (var w in Model.AllWorkers)
                 {
@@ -20,7 +20,7 @@
                 }
             </select>
 
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Добави</button>
         </form>
     </div>
 </div>

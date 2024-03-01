@@ -15,7 +15,7 @@
 @if (User.IsInRole("Admin"))
 {
     <p>
-        <a asp-action="Add">Create New</a>
+        <a asp-action="Add">Добави нова услуга</a>
     </p>
 }
 
@@ -40,12 +40,12 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Required Minutes</th>
-                <th>Desk</th>
-                <th>Worker First Name</th>
-                <th>Worker Last Name</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Необходимо време</th>
+                <th>Бюро</th>
+                <th>Първо име на работника</th>
+                <th>Фамилия на работника</th>
 
                 @if (User.IsInRole("Admin"))
                 {
@@ -97,10 +97,10 @@ else
                     @if (User.IsInRole("Admin"))
                     {
                         <th>
-                            <a asp-action="Edit" asp-route-id="@s.Id">Edit</a>
+                            <a asp-action="Edit" asp-route-id="@s.Id">Обработи</a>
                         </th>
                         <th>
-                            <a asp-action="Delete" asp-route-id="@s.Id" method="post">Delete</a>
+                            <a asp-action="Delete" asp-route-id="@s.Id" method="post">Изтрий</a>
                         </th>
                     }
 

@@ -1,32 +1,24 @@
 ﻿@model IEnumerable<TaxSystem.Data.Request>
 
 @{
-    ViewData["Title"] = "My requests";
+    ViewData["Title"] = "Мойте заявки";
 }
 
 <h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="All" asp-route-completed="true">Completed</a>
+    <a asp-action="All" asp-route-completed="true">Завършени</a>
 </p>
 <p>
-    <a asp-action="All" asp-route-completed="false">Not completed</a>
+    <a asp-action="All" asp-route-completed="false">Незавършени</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Service)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Time)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Desk)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsCompleted)
-            </th>
+            <th>Име на услугата</th>
+            <th>Време на започване</th>
+            <th>Номер на бюро</th>
+            <th>Зав</th>
             <th></th>
         </tr>
     </thead>
@@ -47,7 +39,7 @@
                     @Html.DisplayFor(modelItem => item.IsCompleted)
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id" method="post">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" method="post">Изтрий</a>
                 </td>
             </tr>
         }

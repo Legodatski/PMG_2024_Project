@@ -15,7 +15,7 @@ namespace TaxSystem.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("All", "Service");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

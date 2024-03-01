@@ -8,44 +8,46 @@
     <link rel="stylesheet" href="~/css/superhero.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/superhero.css" asp-append-version="true" />
 </head>
+
+
 <body>
     <header>
         <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
             <div class="container-fluid">
 
+                <li class="nav-item remove-dot">
+                    <a class="nav-link" asp-controller="Service" asp-action="All">Възможни услуги</a>
+                </li>
+
                 @if (User.IsInRole("Admin"))
                 {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Admin" asp-action="AllUsers">All users</a>
+                    <li class="nav-item remove-dot">
+                        <a class ="nav-link" asp-controller="Admin" asp-action="AllUsers">Всички потребители</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Desk" asp-action="All">All Desks</a>
+                    <li class="nav-item remove-dot">
+                        <a class="nav-link" asp-controller="Desk" asp-action="All">Всички бюра</a>
                     </li>
                 }
 
                 @if (User.IsInRole("User"))
                 {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="User" asp-action="RequestSer">Request a service</a>
+                    <li class="nav-item remove-dot">
+                        <a class="nav-link" asp-controller="User" asp-action="RequestSer">Заяви услуга</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="User" asp-action="All">All Requests</a>
+                    <li class="nav-item remove-dot">
+                        <a class="nav-link" asp-controller="User" asp-action="All">Мойте заявки</a>
                     </li>
                 }
 
                 @if (User.IsInRole("Worker"))
                 {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Worker" asp-action="RequestsByWorker" asp-route-completed="true">Completed Requests</a>
+                    <li class="nav-item remove-dot">
+                        <a class="nav-link" asp-controller="Worker" asp-action="RequestsByWorker" asp-route-completed="true">Завършени заявки</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Worker" asp-action="RequestsByWorker" asp-route-completed="false">Not Completed Requests</a>
+                    <li class="nav-item remove-dot">
+                        <a class="nav-link" asp-controller="Worker" asp-action="RequestsByWorker" asp-route-completed="false">Незавършени заявки</a>
                     </li>
                 }
-
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Service" asp-action="All">All Services</a>
-                </li>
 
                 <div class="right">
                     <partial name="_LoginPartial" />
@@ -58,12 +60,6 @@
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - TaxSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

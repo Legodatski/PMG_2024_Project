@@ -1,7 +1,7 @@
 ﻿@model AddDeskServiceViewModel
 
 @{
-    ViewData["Title"] = "Add Desk Service";
+    ViewData["Title"] = "Добави услуга";
     int deskId = int.Parse(Url.RouteUrl(ViewContext.RouteData.Values).Last().ToString());
     Model.DeskId = deskId;
 }
@@ -15,14 +15,14 @@
         <form id="addForm" method="post">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <label>Worker</label>
+            <label asp-for="DeskId"></label>
             <select asp-for="ServiceName" class="form-control">
                 @foreach (var w in Model.AllServiceNames)
                 {
                     <option value="@w">@w</option>
                 }
             </select>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Добави</button>
         </form>
     </div>
 </div>
