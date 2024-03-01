@@ -13,25 +13,26 @@ namespace TaxSystem.Models.User
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "Имел")]
         public string? Email { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
-        [Display(Name = "First Name")]
+        [Display(Name = "Първо име")]
         [MinLength(GlobalConstants.FirstNameMinLenght)]
         [MaxLength(GlobalConstants.FirstNameMaxLenght)]
         public string? FirstName { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Фамилия")]
         [MinLength(GlobalConstants.LastNameMinLenght)]
         [MaxLength(GlobalConstants.LastNameMaxLenght)]
         public string? LastName { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
-        [Display(Name = "Phone Number")]
+        [Display(Name = "Телефонен номер")]
         public string? PhoneNumber { get; set; }
 
+        [Display(Name = "Роля")]
         public string RoleName { get; set; }
     }
 }

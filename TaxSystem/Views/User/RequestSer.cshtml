@@ -1,7 +1,7 @@
 ﻿@model AddRequestViewModel
 
 @{
-    ViewData["Title"] = "Request a service";
+    ViewData["Title"] = "Заяви услуга";
 }
 
 
@@ -13,14 +13,14 @@
         <form id="addForm" method="post">
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <label>Select a service</label>
+            <label asp-for="ServiceName"></label>
             <select asp-for="ServiceName" class="form-control">
                 @foreach (var w in Model.Services)
                 {
                     <option value="@w">@w</option>
                 }
             </select>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Заяви</button>
         </form>
     </div>
 </div>

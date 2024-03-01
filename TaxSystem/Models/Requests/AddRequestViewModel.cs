@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using TaxSystem.Data;
+using TaxSystem.Extensions;
 
 namespace TaxSystem.Models.Requests
 {
@@ -13,7 +14,8 @@ namespace TaxSystem.Models.Requests
 
         public ApplicationUser? User { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
+        [Display(Name = "Название на услугата")]
         public string ServiceName { get; set; }
 
         public IEnumerable<string> Services { get; set; }

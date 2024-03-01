@@ -31,7 +31,7 @@ builder.Services.AddScoped<IDeskService, DeskService>();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
 }

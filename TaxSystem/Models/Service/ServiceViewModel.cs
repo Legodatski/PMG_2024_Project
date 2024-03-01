@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TaxSystem.Extensions;
 
 namespace TaxSystem.Models.Service
 {
@@ -13,13 +14,16 @@ namespace TaxSystem.Models.Service
 
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
+        [Display(Name = "Название на услугата")]
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
+        [Display(Name = "Oписание на услугата")]
         public string Description { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
+        [Display(Name = "Необходимо време за извършване в минути")]
         public string RequiredMinutes { get; set; }
 
         public List<string> DeskIds { get; set; }

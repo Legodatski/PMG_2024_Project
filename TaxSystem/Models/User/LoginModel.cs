@@ -7,11 +7,12 @@ namespace TaxSystem.Models.User
     {
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [EmailAddress]
-        [Display(Name = "Email")]
+        [Display(Name = "Имейл")]
         public string? Email { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [DataType(DataType.Password)]
+        [Display(Name = "Парола")]
         public string? Password { get; set; }
     }
 }

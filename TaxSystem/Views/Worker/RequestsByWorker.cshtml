@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TaxSystem.Data.Request>
 
 @{
-    ViewData["Title"] = "RequestsByWorker";
+    ViewData["Title"] = "Заявки";
 }
 
 <h1> @ViewData["Title"] </h1>
@@ -9,24 +9,12 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Client.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Client.PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Service)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Time)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsCompleted)
-            </th>
+            <th>Първо име на клента</th>
+            <th>Фамилия на клиента</th>
+            <th>Телефон на клиента</th>
+            <th>Има на услугата</th>
+            <th>Час за започване</th>
+            <th>Завършеност</th>
             <th></th>
         </tr>
     </thead>
@@ -52,7 +40,7 @@
                 @Html.DisplayFor(modelItem => item.IsCompleted)
             </td>
             <td>
-                <a asp-action="Complete" asp-route-id="@item.Id" method="post">Complete</a>
+                <a asp-action="Complete" asp-route-id="@item.Id" method="post">Завърши услугата</a>
             </td>
         </tr>
 }
