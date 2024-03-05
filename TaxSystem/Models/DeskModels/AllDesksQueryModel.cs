@@ -9,10 +9,6 @@ namespace TaxSystem.Models.DeskModels
             Desks = new HashSet<Desk>();
         }
 
-        public int DesksPerPage { get; set; } = 5;
-
-        public int CurrentPage { get; set; } = 1;
-
         public string? SearchTerm { get; set; }
 
         public IEnumerable<Desk> Desks { get; set; }

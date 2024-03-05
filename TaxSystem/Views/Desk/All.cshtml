@@ -18,17 +18,6 @@
 }
 
 
-@{
-    var previousPage = Model.CurrentPage - 1;
-    if (previousPage < 1)
-    {
-        previousPage = 1;
-    }
-
-    var maxPage = Math.Ceiling((double)Model.Desks.Count() / Model.DesksPerPage);
-}
-
-
 @if (Model.Desks.Count() == 0)
 {
     <h3>Няма подходящи бюра</h3>
@@ -77,9 +66,6 @@ else
                     </th>
                     <th>
                         <a asp-action="RemoveDeskService" asp-route-id="@s.Id" method="post">Премахни услуга</a>
-                    </th>
-                    <th>
-                        <a asp-action="Edit" asp-route-id="@s.Id">Обработи бюро</a>
                     </th>
                     <th>
                         <a asp-action="Delete" asp-route-id="@s.Id" method="post">Изтрий бюро</a>

@@ -19,10 +19,7 @@ namespace TaxSystem.Controllers
 
         public async Task<IActionResult> All([FromQuery] AllServicesQueryModel query)
         {
-            var queryResult = _service.GetAll(
-                query.SearchTerm,
-                query.CurrentPage,
-                query.UsersPerPage);
+            var queryResult = _service.GetAll(query.SearchTerm);
 
             query.Services = await queryResult;
 

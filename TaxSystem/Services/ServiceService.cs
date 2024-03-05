@@ -51,9 +51,7 @@ namespace TaxSystem.Services
         }
 
         public async Task<IEnumerable<ServiceViewModel>> GetAll(
-             string? searchterm,
-             int currentPage = 1,
-             int usersPerPage = 5)
+             string? searchterm)
         {
 
             var services = context.Services.Where(x => x.IsDeleted == false).AsQueryable();
@@ -92,9 +90,7 @@ namespace TaxSystem.Services
                 viewModels = viewModels.Where(x => x.Name.ToLower().Contains(searchterm) || x.Description.ToLower().Contains(searchterm)).ToList();
             }
 
-            var result = viewModels.Skip((currentPage - 1) * usersPerPage).Take(usersPerPage).AsQueryable();
-
-            return result;
+            return viewModels;
         }
 
         public async Task<Service> GetService(int id)
@@ -109,6 +105,27 @@ namespace TaxSystem.Services
             {
                 names.Add(service.Name);
             }
+
+            return names;
+        }
+
+        public async Task<IEnumerable<string>> GetServiceNamesByDesk(int deskId)
+        {
+            var names = await context.Services
+                .Where(x => x.Desks
+                .Select(a => a.DeskId).Contains(deskId))
+                .Select(y => y.Name)
+                .ToListAsync();
+
+            return names;
+        }
+
+        public async Task<IEnumerable<string>> GetServiceNamesExcludingDesk(int deskId)
+        {
+            var allServices = await context.Services.ToArrayAsync();
+            var servicesInDesk = await context.Services.Where(x => x.Desks.Select(a => a.DeskId).Contains(deskId)).ToArrayAsync();
+
+            var names = allServices.Except(servicesInDesk).Select(x => x.Name);
 
             return names;
         }

@@ -18,8 +18,8 @@ namespace TaxSystem.Controllers
             return RedirectToAction("All", "Service");
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(string? errorMsg)
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error(string errorMsg)
         {
             return View(errorMsg);
         }

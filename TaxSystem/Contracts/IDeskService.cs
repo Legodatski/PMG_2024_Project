@@ -7,15 +7,14 @@ namespace TaxSystem.Contracts
     {
         public Task Add(AddDeskViewModel input);
 
-        public Task<IEnumerable<Desk>> GetAllDesks(
-            string? searchTerm, 
-            int currentPage, 
-            int desksPerPage); 
+        public Task<IEnumerable<Desk>> GetAllDesks(string? searchTerm); 
 
         public Task<IEnumerable<ApplicationUser>> GetAllWorkersWithoutDesks();
 
         public Task AddDeskService(int deskId, string serviceName);
 
         public Task<Desk> GetDeskByWorkerId(string id);
+
+        public Task<bool> IfDeskHasrequests(int deskId, string serviceName);
     }
 }

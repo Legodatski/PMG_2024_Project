@@ -8,9 +8,7 @@ namespace TaxSystem.Contracts
         public Task Add(Service service);
 
         public Task<IEnumerable<ServiceViewModel>> GetAll(
-            string? searchterm,
-            int currentPage = 1,
-            int usersPerPage = 5);
+            string? searchterm);
 
         public Task Edit(Service model);
 
@@ -19,5 +17,9 @@ namespace TaxSystem.Contracts
         public Task<Service> GetService(int id);
 
         public Task Delete(int id);
+
+        public Task<IEnumerable<string>> GetServiceNamesExcludingDesk(int deskId);
+
+        public Task<IEnumerable<string>> GetServiceNamesByDesk(int deskId);
     }
 }

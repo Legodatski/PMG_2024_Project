@@ -3,11 +3,11 @@ using TaxSystem.Extensions;
 
 namespace TaxSystem.Models.DeskModels
 {
-    public class AddDeskServiceViewModel
+    public class RemoveDeskServiceViewModel
     {
-        public AddDeskServiceViewModel()
+        public RemoveDeskServiceViewModel()
         {
-            AllServiceNames = new HashSet<string>();
+            ServicesNames = new HashSet<string>();
         }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
@@ -15,9 +15,8 @@ namespace TaxSystem.Models.DeskModels
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [Display(Name = "Название на услугата")]
-        public string ServiceName { get; set; }
+        public string ServiceName { get; set;}
 
-        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
-        public IEnumerable<string> AllServiceNames { get; set; }
+        public IEnumerable<string> ServicesNames { get; set; }
     }
 }

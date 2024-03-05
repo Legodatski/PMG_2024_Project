@@ -51,9 +51,7 @@ namespace TaxSystem.Services
         }
 
         public async Task<IEnumerable<Desk>> GetAllDesks(
-            string? searchTerm,
-            int currentPage = 1,
-            int desksPerPage = 5)
+            string? searchTerm)
         {
             var allWorkers = await _userManager.GetUsersInRoleAsync(workerRoleName);
             var workers = allWorkers.Where(x => x.IsDeleted == false).ToList();
@@ -65,8 +63,8 @@ namespace TaxSystem.Services
                 searchTerm = searchTerm.ToLower();
 
                 desks = desks.Where(x =>
-                x.Worker.FirstName.Contains(searchTerm) ||
-                x.Worker.LastName.Contains(searchTerm))
+                x.Worker.FirstName.ToLower().Contains(searchTerm) ||
+                x.Worker.LastName.ToLower().Contains(searchTerm))
                     .AsQueryable();
             }
 
@@ -75,9 +73,7 @@ namespace TaxSystem.Services
                 d.Worker = workers.FirstOrDefault(x => x.Id == d.WorkerId);
             }
 
-            var result = desks.Skip((currentPage - 1) * desksPerPage).Take(desksPerPage).AsQueryable();
-
-            return result;
+            return desks;
         }
 
         private bool IfWorkerHasDesk(string workerId)
@@ -121,5 +117,20 @@ namespace TaxSystem.Services
         public async Task<Desk> GetDeskByWorkerId(string id) 
             => await _context.Desks.FirstOrDefaultAsync(x => x.WorkerId == id);
 
+        public async Task<bool> IfDeskHasrequests(int deskId, string serviceName)
+        {
+            var service = await _context.Services.FirstOrDefaultAsync(x => x.Name.Equals(serviceName));
+
+            DesksServices ds = await _context.DeskService.FirstOrDefaultAsync(x => x.DeskId== deskId && x.ServiceId==service.Id);
+
+            if (ds != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

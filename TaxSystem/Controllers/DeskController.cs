@@ -24,10 +24,7 @@ namespace TaxSystem.Controllers
 
         public async Task<IActionResult> All([FromQuery] AllDesksQueryModel query)
         {
-            var queryResult = _deskService.GetAllDesks(
-                query.SearchTerm,
-                query.CurrentPage, 
-                query.DesksPerPage);
+            var queryResult = _deskService.GetAllDesks(query.SearchTerm);
 
             query.Desks = await queryResult;
 
@@ -58,11 +55,11 @@ namespace TaxSystem.Controllers
             return RedirectToAction(nameof(All));
         }
 
-        public IActionResult AddDeskService(int Id)
+        public async Task<IActionResult> AddDeskService(int Id)
         {
             var model = new AddDeskServiceViewModel();
             model.DeskId = Id;
-            model.AllServiceNames = _service.GetServiceNames();
+            model.AllServiceNames = await _service.GetServiceNamesExcludingDesk(Id);
 
             return View(model);
         }
@@ -80,6 +77,38 @@ namespace TaxSystem.Controllers
             }
 
             await _deskService.AddDeskService(model.DeskId, model.ServiceName);
+
+            return RedirectToAction(nameof(All));
+        }
+
+
+        public async Task<IActionResult> RemoveDeskService(int id)
+        {
+            var model = new RemoveDeskServiceViewModel()
+            {
+                DeskId = id,
+                ServicesNames = await _service.GetServiceNamesByDesk(id)
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveDeskService(RemoveDeskServiceViewModel model)
+        {
+            var url = Request.GetDisplayUrl();
+            var deskId = int.Parse(url.Last().ToString());
+            model.DeskId = deskId;
+
+            if (await _deskService.IfDeskHasrequests(model.DeskId, model.ServiceName))
+            {
+                ModelState.AddModelError("attribute", "Ne moje");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
 
             return RedirectToAction(nameof(All));
         }
