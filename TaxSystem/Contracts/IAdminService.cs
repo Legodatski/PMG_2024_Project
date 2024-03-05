@@ -8,9 +8,7 @@ namespace TaxSystem.Contracts
     {
         public Task<IEnumerable<UserViewModel>> GetAllUsers(
             string? searchTerm = null,
-            string? roleName = null,
-            int currentPage = 1,
-            int usersPerPage = 5);
+            string? roleName = null);
 
         public Task<ApplicationUser> FindUser(string id);
 

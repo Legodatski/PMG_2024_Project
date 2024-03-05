@@ -31,7 +31,9 @@ builder.Services.AddScoped<IDeskService, DeskService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.AccessDeniedPath = "/Home/Error/Access denied";
+    options.AccessDeniedPath = "/Home/Error";
+    options.LoginPath = "/User/Login";
+    options.LogoutPath = "/User/Logout";
 });
 
 var app = builder.Build();

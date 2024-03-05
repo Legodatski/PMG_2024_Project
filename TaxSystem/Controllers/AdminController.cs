@@ -25,9 +25,7 @@ namespace TaxSystem.Controllers
         {
             var queryResult = _adminService.GetAllUsers(
                 query.SearchTerm,
-                query.RoleName,
-                query.CurrentPage,
-                query.UsersPerPage);
+                query.RoleName);
 
             query.Users = await queryResult;
 
@@ -61,6 +59,11 @@ namespace TaxSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditUserModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
             await _adminService.EditUser(model);
 
             return RedirectToAction(nameof(AllUsers));

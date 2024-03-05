@@ -1,4 +1,5 @@
-﻿using TaxSystem.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using TaxSystem.Data;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace TaxSystem.Models.User
@@ -9,13 +10,9 @@ namespace TaxSystem.Models.User
         {
             Users = new HashSet<UserViewModel>();
         }
-
-        public  int UsersPerPage { get; set; } = 5;
-
-        public int CurrentPage { get; set; } = 1;
-
         public string SearchTerm { get; set; } = null;
 
+        [Display(Name = "Наменование на роля")]
         public string RoleName { get; set; } = null;
 
         public IEnumerable<UserViewModel> Users { get; set; }

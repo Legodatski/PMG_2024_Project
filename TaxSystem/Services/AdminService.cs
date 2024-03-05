@@ -19,10 +19,9 @@ namespace TaxSystem.Services
             this.context = context;
         }
 
-        public async Task<IEnumerable<UserViewModel>> GetAllUsers(string? searchTerm = null, 
-            string? roleName = null,
-            int currentPage = 1,
-            int usersPerPage = 5)
+        public async Task<IEnumerable<UserViewModel>> GetAllUsers(
+            string? searchTerm = null, 
+            string? roleName = null)
         {
             var users = context.Users.Where(x => x.IsDeleted == false && x.Id != adminId).AsQueryable();
             var roles = context.Roles.ToArray();
@@ -62,9 +61,7 @@ namespace TaxSystem.Services
                 x.LastName.ToLower().Contains(lowerTerm)).ToList();
             }
 
-            var usersResult = usersQuery.Skip((currentPage - 1) * usersPerPage).Take(usersPerPage).AsQueryable();
-
-            return usersResult;
+            return usersQuery;
         }
 
         public async Task<ApplicationUser> FindUser(string id)

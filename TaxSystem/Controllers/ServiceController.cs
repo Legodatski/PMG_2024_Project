@@ -38,6 +38,10 @@ namespace TaxSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Service input)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             await _service.Add(input);
 
             return RedirectToAction(nameof(All));
@@ -55,6 +59,10 @@ namespace TaxSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Service input)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             await _service.Edit(input);
 
             return RedirectToAction(nameof(All));
