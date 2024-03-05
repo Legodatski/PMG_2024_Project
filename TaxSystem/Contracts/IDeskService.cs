@@ -15,6 +15,6 @@ namespace TaxSystem.Contracts
 
         public Task<Desk> GetDeskByWorkerId(string id);
 
-        public Task<bool> IfDeskHasrequests(int deskId, string serviceName);
+        public Task RemoveDesksSer(int deskId, string serName);
     }
 }

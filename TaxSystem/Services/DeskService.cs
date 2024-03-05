@@ -117,20 +117,14 @@ namespace TaxSystem.Services
         public async Task<Desk> GetDeskByWorkerId(string id) 
             => await _context.Desks.FirstOrDefaultAsync(x => x.WorkerId == id);
 
-        public async Task<bool> IfDeskHasrequests(int deskId, string serviceName)
+        public async Task RemoveDesksSer(int deskId, string serName)
         {
-            var service = await _context.Services.FirstOrDefaultAsync(x => x.Name.Equals(serviceName));
+            var ser = await _context.Services.FirstOrDefaultAsync(x => x.Name == serName);
 
-            DesksServices ds = await _context.DeskService.FirstOrDefaultAsync(x => x.DeskId== deskId && x.ServiceId==service.Id);
+            var toDel = await _context.DeskService.FirstOrDefaultAsync(x => x.DeskId == deskId && x.ServiceId == ser.Id);
 
-            if (ds != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            _context.DeskService.Remove(toDel);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -100,15 +100,12 @@ namespace TaxSystem.Controllers
             var deskId = int.Parse(url.Last().ToString());
             model.DeskId = deskId;
 
-            if (await _deskService.IfDeskHasrequests(model.DeskId, model.ServiceName))
-            {
-                ModelState.AddModelError("attribute", "Ne moje");
-            }
-
             if (!ModelState.IsValid)
             {
                 return View();
             }
+
+           await _deskService.RemoveDesksSer(model.DeskId, model.ServiceName);
 
             return RedirectToAction(nameof(All));
         }

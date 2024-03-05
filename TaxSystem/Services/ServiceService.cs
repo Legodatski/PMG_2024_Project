@@ -111,13 +111,22 @@ namespace TaxSystem.Services
 
         public async Task<IEnumerable<string>> GetServiceNamesByDesk(int deskId)
         {
+            var requests = context.Requests.Where(x => x.DeskId == deskId);
+
+            var exclNames = await context.Services
+                .Where(x => x.Desks
+                .Select(a => a.DeskId).Contains(deskId) && requests.Select(b => b.ServiceId).Contains(x.Id))
+                .Select(y => y.Name)
+                .ToListAsync();
+
             var names = await context.Services
                 .Where(x => x.Desks
                 .Select(a => a.DeskId).Contains(deskId))
                 .Select(y => y.Name)
                 .ToListAsync();
 
-            return names;
+
+            return names.Except(exclNames);
         }
 
         public async Task<IEnumerable<string>> GetServiceNamesExcludingDesk(int deskId)
