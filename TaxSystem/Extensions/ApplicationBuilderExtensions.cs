@@ -35,17 +35,16 @@ namespace TaxSystem.Extensions
                     await roleManager.CreateAsync(userRole);
                 }
 
-                ApplicationUser admin = await userManager.FindByEmailAsync("admin1@gmail.com");
-
+                string adminId = "35bbae7d-b2a0-472a-8137-e8df5f4ac614";
+                ApplicationUser admin = await userManager.FindByIdAsync(adminId);
 
                 if (admin == null)
                 {
                     await userManager.CreateAsync(new ApplicationUser()
                     {
-                        Id = "35bbae7d-b2a0-472a-8137-e8df5f4ac614",
+                        Id = adminId,
                         FirstName = "Admin",
                         PhoneNumber = "+359885778908",
-                        IsDeleted = false,
                         LastName = "Adminov",
                         Email = "admin1@gmail.com",
                         UserName = "Admin"

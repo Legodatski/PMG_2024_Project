@@ -23,7 +23,7 @@ namespace TaxSystem.Services
             string? searchTerm = null, 
             string? roleName = null)
         {
-            var users = context.Users.Where(x => x.IsDeleted == false && x.Id != adminId).AsQueryable();
+            var users = context.Users.Where(x =>x.Id != adminId).AsQueryable();
             var roles = context.Roles.ToArray();
             var userRoles = context.UserRoles.ToArray();
 
@@ -65,7 +65,7 @@ namespace TaxSystem.Services
         }
 
         public async Task<ApplicationUser> FindUser(string id)
-            => await context.Users.FirstOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
+            => await context.Users.FirstOrDefaultAsync(x => x.Id == id);
 
         public async Task<string> GetRoleNameByUserId(string id)
         {
@@ -108,7 +108,7 @@ namespace TaxSystem.Services
         {
             var user = await context.Users.FindAsync(id);
 
-            user.IsDeleted = true;
+             context.Users.Remove(user);
 
             await context.SaveChangesAsync();
         }

@@ -63,7 +63,6 @@ namespace TaxSystem.Services
                 ClientId = model.User.Id,
                 Service = service,
                 ServiceId = service.Id,
-                IsDeleted = false,
                 IsCompleted = false,
                 Time = time.ToString(),
             };
@@ -83,12 +82,15 @@ namespace TaxSystem.Services
 
         public async Task Delete(int id)
         {
-            var services = await context.Services.Where(x => x.IsDeleted == false).ToArrayAsync();
-            var request = await context.Requests.Where(x => x.IsDeleted == false).FirstOrDefaultAsync(x => x.Id == id);
+            var services = await context.Services.ToArrayAsync();
+            var request = await context.Requests.FirstOrDefaultAsync(x => x.Id == id);
             var allrequests = context.Requests.Where(x => x.DeskId == request.DeskId).ToArray();
-            request.IsDeleted = true;
+
             var delTime = StringToTime(request.Time);
             var serTime = double.Parse(request.Service.RequiredMinutes);
+
+            if (request != null)
+                context.Requests.Remove(request);
 
             foreach (var r in allrequests)
             {
@@ -110,7 +112,7 @@ namespace TaxSystem.Services
         {
             var services = context.Services.ToArray();
             var desks = context.Desks.ToArray();
-            var requests = context.Requests.Where(x => x.ClientId == user.Id && x.IsDeleted == false).ToArray();
+            var requests = context.Requests.Where(x => x.ClientId == user.Id).ToArray();
 
 
             if (completed == false)
@@ -129,7 +131,7 @@ namespace TaxSystem.Services
         {
             var services = context.Services.ToArray();
             var clients = context.Users.ToArray();
-            var requests = context.Requests.Where(x => x.DeskId == id && x.IsDeleted == false).ToArray();
+            var requests = context.Requests.Where(x => x.DeskId == id).ToArray();
 
             if (completed == false)
             {

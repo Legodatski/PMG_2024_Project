@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using TaxSystem.Extensions;
 
 namespace TaxSystem.Data
 {
@@ -7,29 +8,26 @@ namespace TaxSystem.Data
         public Service()
         {
             Desks = new List<DesksServices>();
-            IsDeleted = false;
         }
 
-        [Key]
+        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [Display(Name = "Название")]
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [Display(Name = "Описание")]
         public string Description { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [Display(Name = "Необходимо време за извършване в минути")]
         public string RequiredMinutes { get; set; }
 
         [Required]
         public ICollection<DesksServices> Desks { get; set; }
 
-        [Required]
-        public bool IsDeleted { get; set; }
 
     }
 }

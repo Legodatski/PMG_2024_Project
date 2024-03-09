@@ -24,8 +24,7 @@ namespace TaxSystem.Services
         {
             Desk desk = new Desk()
             {
-                WorkerId = input.WorkerId,
-                IsDeleted = false
+                WorkerId = input.WorkerId
             };
 
 
@@ -36,7 +35,7 @@ namespace TaxSystem.Services
         public async Task<IEnumerable<ApplicationUser>> GetAllWorkersWithoutDesks()
         {
             var result = await _userManager.GetUsersInRoleAsync(workerRoleName);
-            var workers = result.Where(x => x.IsDeleted == false).ToList();
+            var workers = result.ToList();
             var workersWithoutDesks = new List<ApplicationUser>();
 
             foreach (var worker in workers)
@@ -54,9 +53,9 @@ namespace TaxSystem.Services
             string? searchTerm)
         {
             var allWorkers = await _userManager.GetUsersInRoleAsync(workerRoleName);
-            var workers = allWorkers.Where(x => x.IsDeleted == false).ToList();
+            var workers = allWorkers.ToList();
 
-            var desks = _context.Desks.Where(x => x.IsDeleted == false).ToList().AsQueryable();
+            var desks = _context.Desks.ToList().AsQueryable();
 
             if (searchTerm != null)
             {

@@ -10,8 +10,5 @@ namespace TaxSystem.Data
 
         [Required]
         public string LastName { get; set; }
-
-        [Required]
-        public bool IsDeleted { get; set; }
     }
 }

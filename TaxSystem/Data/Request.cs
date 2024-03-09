@@ -33,9 +33,6 @@ namespace TaxSystem.Data
         public int DeskId { get; set; }
 
         [Required]
-        public bool IsDeleted { get; set; }
-
-        [Required]
         public bool IsCompleted { get; set; }
     }
 }

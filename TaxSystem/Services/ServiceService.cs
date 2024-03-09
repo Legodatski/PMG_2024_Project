@@ -31,7 +31,7 @@ namespace TaxSystem.Services
             var service = await context.Services.FindAsync(id);
 
             if (service != null)
-                service.IsDeleted = true;
+                context.Services.Remove(service);
 
             await context.SaveChangesAsync();
         }
@@ -54,7 +54,7 @@ namespace TaxSystem.Services
              string? searchterm)
         {
 
-            var services = context.Services.Where(x => x.IsDeleted == false).AsQueryable();
+            var services = context.Services.AsQueryable();
             var deskServ = context.DeskService.ToArray();
             var workers = await _userManager.GetUsersInRoleAsync("Worker");
             var desks = context.Desks.ToArray();
