@@ -8,7 +8,7 @@ namespace TaxSystem.Data
         public Desk()
         {
             Requests = new List<Request>();
-            Services = new List<DesksServices>();
+            Amenities = new List<DeskAmenity>();
         }
 
         [Key]
@@ -21,7 +21,7 @@ namespace TaxSystem.Data
         [Required]
         public ApplicationUser Worker { get; set; }
 
-        public ICollection<DesksServices> Services { get; set; }
+        public ICollection<DeskAmenity> Amenities { get; set; }
 
         public ICollection<Request> Requests { get; set; }
 

@@ -1,20 +1,20 @@
 ﻿using TaxSystem.Data;
-using TaxSystem.Models.Service;
+using TaxSystem.Models.Amenity;
 
 namespace TaxSystem.Contracts
 {
-    public interface IServiceService
+    public interface IAmenityService
     {
-        public Task Add(Service service);
+        public Task Add(Amenity Amenity);
 
-        public Task<IEnumerable<ServiceViewModel>> GetAll(
+        public Task<IEnumerable<AmenityViewModel>> GetAll(
             string? searchterm);
 
-        public Task Edit(Service model);
+        public Task Edit(Amenity model);
 
         public IEnumerable<string> GetServiceNames();
 
-        public Task<Service> GetService(int id);
+        public Task<Amenity> GetService(int id);
 
         public Task Delete(int id);
 

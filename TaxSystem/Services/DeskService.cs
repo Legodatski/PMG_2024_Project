@@ -92,16 +92,16 @@ namespace TaxSystem.Services
 
         public async Task AddDeskService(int deskId, string serviceName)
         {
-            var service = await _context.Services.FirstOrDefaultAsync(x => x.Name == serviceName);
+            var Amenity = await _context.Services.FirstOrDefaultAsync(x => x.Name == serviceName);
             var desk = await _context.Desks.FirstOrDefaultAsync(x => x.Id == deskId);
 
 
-            if (service != null)
+            if (Amenity != null)
             {
-                DesksServices deskService = new DesksServices()
+                DeskAmenity deskService = new DeskAmenity()
                 {
                     DeskId = deskId,
-                    ServiceId = service.Id,
+                    ServiceId = Amenity.Id,
                 };
 
                 if (!_context.DeskService.Contains(deskService))

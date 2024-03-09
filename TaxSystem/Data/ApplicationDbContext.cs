@@ -15,9 +15,9 @@ namespace TaxSystem.Data
 
         public DbSet<Request> Requests { get; set; }
 
-        public DbSet<Service> Services { get; set; }
+        public DbSet<Amenity> Services { get; set; }
 
-        public DbSet<DesksServices> DeskService { get; set; }
+        public DbSet<DeskAmenity> DeskService { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -28,12 +28,12 @@ namespace TaxSystem.Data
                 .WithMany(x => x.Requests)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<DesksServices>()
+            builder.Entity<DeskAmenity>()
                 .HasKey(x => new { x.ServiceId, x.DeskId });
 
-            builder.Entity<DesksServices>()
+            builder.Entity<DeskAmenity>()
                 .HasOne(x => x.Desk)
-                .WithMany(x => x.Services)
+                .WithMany(x => x.Amenities)
                 .HasForeignKey(x => x.DeskId);
 
             AlterUser(builder);

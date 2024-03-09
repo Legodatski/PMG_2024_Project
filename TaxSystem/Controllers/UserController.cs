@@ -15,19 +15,19 @@ namespace TaxSystem.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private IRequestService requestService;
-        private IServiceService service;
+        private IAmenityService Amenity;
 
         public UserController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IRequestService _requestService,
-            IServiceService _service
+            IAmenityService _service
             )
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             requestService = _requestService;
-            service = _service;
+            Amenity = _service;
         }
 
         [AllowAnonymous]
@@ -100,7 +100,7 @@ namespace TaxSystem.Controllers
         public IActionResult RequestSer()
         {
             var model = new AddRequestViewModel();
-            model.Services = service.GetServiceNames();
+            model.Services = Amenity.GetServiceNames();
             return View(model);
         }
 

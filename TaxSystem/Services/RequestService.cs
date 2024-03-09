@@ -19,10 +19,10 @@ namespace TaxSystem.Services
 
         public async Task Add(AddRequestViewModel model)
         {
-            var service = await context.Services.FirstOrDefaultAsync(x => x.Name == model.ServiceName);
-            var desks = context.DeskService.Where(x => x.Service == service).Select(y => y.Desk);
+            var Amenity = await context.Services.FirstOrDefaultAsync(x => x.Name == model.ServiceName);
+            var desks = context.DeskService.Where(x => x.Amenity == Amenity).Select(y => y.Desk);
 
-            desks = desks.OrderBy(x => x.Services.Count());
+            desks = desks.OrderBy(x => x.Amenities.Count());
 
             var desk = desks.First();
 
@@ -38,7 +38,7 @@ namespace TaxSystem.Services
 
                 time = StringToTime(tInput);
 
-                time = time.AddMinutes(double.Parse(service.RequiredMinutes));
+                time = time.AddMinutes(double.Parse(Amenity.RequiredMinutes));
                 time = time.AddMinutes(5);
 
                 if (time.Hour == 12)
@@ -47,7 +47,7 @@ namespace TaxSystem.Services
                 }
                 else if (time.Hour >= 17)
                 {
-                    //throw exception
+                    throw new Exception("not gud time");
                 }
             }
             else
@@ -61,8 +61,8 @@ namespace TaxSystem.Services
                 DeskId = desk.Id,
                 Client = model.User,
                 ClientId = model.User.Id,
-                Service = service,
-                ServiceId = service.Id,
+                Amenity = Amenity,
+                AmenityId = Amenity.Id,
                 IsCompleted = false,
                 Time = time.ToString(),
             };
@@ -87,7 +87,7 @@ namespace TaxSystem.Services
             var allrequests = context.Requests.Where(x => x.DeskId == request.DeskId).ToArray();
 
             var delTime = StringToTime(request.Time);
-            var serTime = double.Parse(request.Service.RequiredMinutes);
+            var serTime = double.Parse(request.Amenity.RequiredMinutes);
 
             if (request != null)
                 context.Requests.Remove(request);

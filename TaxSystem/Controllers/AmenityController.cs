@@ -2,22 +2,22 @@
 using Microsoft.AspNetCore.Mvc;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
-using TaxSystem.Models.Service;
+using TaxSystem.Models.Amenity;
 
 namespace TaxSystem.Controllers
 {
-    public class ServiceController : Controller
+    public class AmenityController : Controller
     {
 
-        private readonly IServiceService _service;
+        private readonly IAmenityService _service;
 
-        public ServiceController(
-            IServiceService service)
+        public AmenityController(
+            IAmenityService Amenity)
         {
-            _service = service;
+            _service = Amenity;
         }
 
-        public async Task<IActionResult> All([FromQuery] AllServicesQueryModel query)
+        public async Task<IActionResult> All([FromQuery] AllAmenitiesQueryModel query)
         {
             var queryResult = _service.GetAll(query.SearchTerm);
 
@@ -29,14 +29,14 @@ namespace TaxSystem.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Add()
         {
-            Service service = new Service();
+            Amenity Amenity = new Amenity();
 
-            return View(service);
+            return View(Amenity);
         }
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> Add(Service input)
+        public async Task<IActionResult> Add(Amenity input)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace TaxSystem.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public async Task<IActionResult> Edit(Service input)
+        public async Task<IActionResult> Edit(Amenity input)
         {
             if (!ModelState.IsValid)
             {

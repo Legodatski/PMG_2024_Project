@@ -1,33 +1,34 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TaxSystem.Extensions;
 
-namespace TaxSystem.Data
+namespace TaxSystem.Models.Amenity
 {
-    public class Service
+    public class AmenityViewModel
     {
-        public Service()
+        public AmenityViewModel()
         {
-            Desks = new List<DesksServices>();
+            DeskIds = new List<string>();
+            WorkerFirstNames = new List<string>();
+            WorkerLastNames = new List<string>();
         }
 
-        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         public int Id { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
-        [Display(Name = "Название")]
+        [Display(Name = "Название на услугата")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
-        [Display(Name = "Описание")]
+        [Display(Name = "Oписание на услугата")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
         [Display(Name = "Необходимо време за извършване в минути")]
         public string RequiredMinutes { get; set; }
 
-        [Required]
-        public ICollection<DesksServices> Desks { get; set; }
+        public List<string> DeskIds { get; set; }
 
-
+        public List<string> WorkerFirstNames { get; set; }
+        public List<string> WorkerLastNames { get; set; }
     }
 }

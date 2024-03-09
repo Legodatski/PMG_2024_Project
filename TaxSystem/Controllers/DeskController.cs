@@ -14,11 +14,11 @@ namespace TaxSystem.Controllers
     public class DeskController : Controller
     {
         private IDeskService _deskService;
-        private IServiceService _service;
+        private IAmenityService _service;
 
-        public DeskController(IDeskService deskService, IServiceService service)
+        public DeskController(IDeskService deskService, IAmenityService Amenity)
         {
-            _service = service;
+            _service = Amenity;
             _deskService = deskService;
         }
 

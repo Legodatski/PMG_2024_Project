@@ -25,7 +25,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IAmenityService, AmenityService>();
 builder.Services.AddScoped<IRequestService, RequestService>();
 builder.Services.AddScoped<IDeskService, DeskService>();
 

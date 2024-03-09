@@ -6,6 +6,7 @@ namespace TaxSystem.Data
     public class Request
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Required]
@@ -16,11 +17,11 @@ namespace TaxSystem.Data
         public string ClientId { get; set; }
 
         [Required]
-        public Service Service { get; set; }
+        public Amenity Amenity { get; set; }
 
         [Required]
-        [ForeignKey(nameof(Service))]
-        public int ServiceId { get; set; }
+        [ForeignKey(nameof(Amenity))]
+        public int AmenityId { get; set; }
 
         [Required]
         public string Time { get; set; }

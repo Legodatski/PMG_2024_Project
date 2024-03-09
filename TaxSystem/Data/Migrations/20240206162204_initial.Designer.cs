@@ -310,7 +310,7 @@ namespace TaxSystem.Data.Migrations
                     b.ToTable("Requests");
                 });
 
-            modelBuilder.Entity("TaxSystem.Data.Service", b =>
+            modelBuilder.Entity("TaxSystem.Data.Amenity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -407,7 +407,7 @@ namespace TaxSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TaxSystem.Data.Service", "Service")
+                    b.HasOne("TaxSystem.Data.Amenity", "Amenity")
                         .WithMany("Desks")
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -415,7 +415,7 @@ namespace TaxSystem.Data.Migrations
 
                     b.Navigation("Desk");
 
-                    b.Navigation("Service");
+                    b.Navigation("Amenity");
                 });
 
             modelBuilder.Entity("TaxSystem.Data.Request", b =>
@@ -432,7 +432,7 @@ namespace TaxSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TaxSystem.Data.Service", "Service")
+                    b.HasOne("TaxSystem.Data.Amenity", "Amenity")
                         .WithMany()
                         .HasForeignKey("ServiceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -442,7 +442,7 @@ namespace TaxSystem.Data.Migrations
 
                     b.Navigation("Desk");
 
-                    b.Navigation("Service");
+                    b.Navigation("Amenity");
                 });
 
             modelBuilder.Entity("TaxSystem.Data.Desk", b =>
@@ -452,7 +452,7 @@ namespace TaxSystem.Data.Migrations
                     b.Navigation("Services");
                 });
 
-            modelBuilder.Entity("TaxSystem.Data.Service", b =>
+            modelBuilder.Entity("TaxSystem.Data.Amenity", b =>
                 {
                     b.Navigation("Desks");
                 });

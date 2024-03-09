@@ -5,52 +5,52 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
-using TaxSystem.Models.Service;
+using TaxSystem.Models.Amenity;
 
 namespace TaxSystem.Services
 {
-    public class ServiceService : IServiceService
+    public class AmenityService : IAmenityService
     {
         private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ServiceService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public AmenityService(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             this.context = context;
             _userManager = userManager;
         }
 
-        public async Task Add(Service service)
+        public async Task Add(Amenity Amenity)
         {
-            await context.Services.AddAsync(service);
+            await context.Services.AddAsync(Amenity);
             await context.SaveChangesAsync();
         }
 
         public async Task Delete(int id)
         {
-            var service = await context.Services.FindAsync(id);
+            var Amenity = await context.Services.FindAsync(id);
 
-            if (service != null)
-                context.Services.Remove(service);
+            if (Amenity != null)
+                context.Services.Remove(Amenity);
 
             await context.SaveChangesAsync();
         }
 
-        public async Task Edit(Service model)
+        public async Task Edit(Amenity model)
         {
-            var service = await context.Services.FindAsync(model.Id);
+            var Amenity = await context.Services.FindAsync(model.Id);
 
-            if (service != null)
+            if (Amenity != null)
             {
-                service.Name = model.Name;
-                service.Description = model.Description;
-                service.RequiredMinutes = model.RequiredMinutes;
+                Amenity.Name = model.Name;
+                Amenity.Description = model.Description;
+                Amenity.RequiredMinutes = model.RequiredMinutes;
 
                 await context.SaveChangesAsync();
             }
         }
 
-        public async Task<IEnumerable<ServiceViewModel>> GetAll(
+        public async Task<IEnumerable<AmenityViewModel>> GetAll(
              string? searchterm)
         {
 
@@ -59,11 +59,11 @@ namespace TaxSystem.Services
             var workers = await _userManager.GetUsersInRoleAsync("Worker");
             var desks = context.Desks.ToArray();
 
-            var viewModels = new List<ServiceViewModel>();
+            var viewModels = new List<AmenityViewModel>();
 
             foreach (var s in services)
             {
-                var toAdd = new ServiceViewModel
+                var toAdd = new AmenityViewModel
                 {
                     Id = s.Id,
                     Name = s.Name,
@@ -93,7 +93,7 @@ namespace TaxSystem.Services
             return viewModels;
         }
 
-        public async Task<Service> GetService(int id)
+        public async Task<Amenity> GetService(int id)
             => await context.Services.FindAsync(id);
 
         public IEnumerable<string> GetServiceNames()
@@ -101,9 +101,9 @@ namespace TaxSystem.Services
             var services = context.Services.ToArray();
             List<string> names = new List<string>();
 
-            foreach (var service in services)
+            foreach (var Amenity in services)
             {
-                names.Add(service.Name);
+                names.Add(Amenity.Name);
             }
 
             return names;
@@ -115,7 +115,7 @@ namespace TaxSystem.Services
 
             var exclNames = await context.Services
                 .Where(x => x.Desks
-                .Select(a => a.DeskId).Contains(deskId) && requests.Select(b => b.ServiceId).Contains(x.Id))
+                .Select(a => a.DeskId).Contains(deskId) && requests.Select(b => b.AmenityId).Contains(x.Id))
                 .Select(y => y.Name)
                 .ToListAsync();
 

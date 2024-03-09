@@ -15,7 +15,7 @@ namespace TaxSystem.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("All", "Service");
+            return RedirectToAction("All", "Amenity");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
