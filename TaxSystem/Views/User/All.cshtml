@@ -6,42 +6,49 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<p>
-    <a asp-action="All" asp-route-completed="true">Завършени</a>
-</p>
-<p>
-    <a asp-action="All" asp-route-completed="false">Незавършени</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Име на услугата</th>
-            <th>Време на започване</th>
-            <th>Номер на бюро</th>
-            <th>Завършеност</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (Model is null)
+{
+    <h4>Нямате подадени заявки</h4>
+}
+else
+{
+    <p>
+        <a asp-action="All" asp-route-completed="true">Завършени</a>
+    </p>
+    <p>
+        <a asp-action="All" asp-route-completed="false">Незавършени</a>
+    </p>
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Amenity.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Time)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Desk.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsCompleted)
-                </td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id" method="post">Изтрий</a>
-                </td>
+                <th>Име на услугата</th>
+                <th>Време на започване</th>
+                <th>Номер на бюро</th>
+                <th>Завършеност</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amenity.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Desk.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsCompleted)
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id" method="post">Изтрий</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

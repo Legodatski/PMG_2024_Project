@@ -22,7 +22,7 @@ namespace TaxSystem.Services
             var Amenity = await context.Services.FirstOrDefaultAsync(x => x.Name == model.ServiceName);
             var desks = context.DeskService.Where(x => x.Amenity == Amenity).Select(y => y.Desk);
 
-            desks = desks.OrderBy(x => x.Amenities.Count());
+            desks = desks.OrderBy(x => x.Requests.Count());
 
             var desk = desks.First();
 
@@ -32,7 +32,7 @@ namespace TaxSystem.Services
 
             if (requests.Any())
             {
-                requests.OrderByDescending(x => StringToTime(x.Time));
+                requests = requests.OrderByDescending(x => x.Time);
 
                 string tInput = requests.First().Time;
 
@@ -47,7 +47,7 @@ namespace TaxSystem.Services
                 }
                 else if (time.Hour >= 17)
                 {
-                    throw new Exception("not gud time");
+                    throw new Exception("бюрото не работи");
                 }
             }
             else
@@ -99,6 +99,18 @@ namespace TaxSystem.Services
                 if (time > delTime)
                 {
                     time = time.AddMinutes(-serTime);
+                    time = time.AddMinutes(-5);
+
+                    if (time.Hour == 12)
+                    {
+                        time = new TimeOnly(11, time.Minute);
+                    }
+
+                    if (allrequests.Select(x=>x.Time).Contains(time.ToString()))
+                    {
+                        time = time.AddMinutes(serTime);
+                    }
+
                     r.Time = time.ToString();
                 }
             }
@@ -113,7 +125,6 @@ namespace TaxSystem.Services
             var services = context.Services.ToArray();
             var desks = context.Desks.ToArray();
             var requests = context.Requests.Where(x => x.ClientId == user.Id).ToArray();
-
 
             if (completed == false)
             {

@@ -120,7 +120,7 @@ namespace TaxSystem.Controllers
 
             await requestService.Add(model);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("All");
         }
 
         public async Task<IActionResult> All(bool? completed)

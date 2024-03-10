@@ -31,9 +31,9 @@ else
                 <th>Название</th>
                 <th>Описание</th>
                 <th>Необходимо време</th>
-                <th>Бюро</th>
-                <th>Първо име на работника</th>
-                <th>Фамилия на работника</th>
+                <th>Бюра</th>
+                <th>Първи имена на работниците</th>
+                <th>Фамилии на работниците</th>
 
                 @if (User.IsInRole("Admin"))
                 {
@@ -60,8 +60,7 @@ else
                     <th>
                         @foreach (var id in s.DeskIds)
                         {
-                            @Html.DisplayFor(x => id)
-                            ;
+                            <p>@Html.DisplayFor(x => id)</p>
                         }
                     </th>
 
@@ -69,16 +68,14 @@ else
 
                         @foreach (var item in s.WorkerFirstNames)
                         {
-                            @Html.DisplayFor(x => item)
-                            ;
+                            <p>@Html.DisplayFor(x => item)</p>
                         }
                     </th>
 
                     <th>
                         @foreach (var item in s.WorkerLastNames)
                         {
-                            @Html.DisplayFor(x => item)
-                            ;
+                            <p> @Html.DisplayFor(x => item)</p>
                         }
                     </th>
 
