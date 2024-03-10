@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Ganss.Xss;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
@@ -8,13 +9,14 @@ namespace TaxSystem.Controllers
 {
     public class AmenityController : Controller
     {
-
         private readonly IAmenityService _service;
+        private HtmlSanitizer sanitizer;
 
         public AmenityController(
             IAmenityService Amenity)
         {
             _service = Amenity;
+            sanitizer = new HtmlSanitizer();
         }
 
         public async Task<IActionResult> All([FromQuery] AllAmenitiesQueryModel query)
@@ -38,10 +40,18 @@ namespace TaxSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Amenity input)
         {
-            if (!ModelState.IsValid)
+            string name = sanitizer.Sanitize(input.Name);
+            string description = sanitizer.Sanitize(input.Description);
+            string requiredMins = sanitizer.Sanitize(input.RequiredMinutes);
+
+            if (!ModelState.IsValid ||
+                name == null ||
+                description == null ||
+                requiredMins == null)
             {
                 return View();
             }
+
             await _service.Add(input);
 
             return RedirectToAction(nameof(All));

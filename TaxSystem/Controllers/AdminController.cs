@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Ganss.Xss;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
@@ -11,6 +12,7 @@ namespace TaxSystem.Controllers
     {
         private readonly IAdminService _adminService;
         private readonly IRequestService _requestService;
+        private HtmlSanitizer sanitizer;
 
         public AdminController(
             IAdminService adminService,
@@ -19,6 +21,7 @@ namespace TaxSystem.Controllers
         {
             _requestService = requestService;
             _adminService = adminService;
+            sanitizer = new HtmlSanitizer();
         }
 
         public async Task<IActionResult> AllUsers([FromQuery] AllUsersQueryModel query)
@@ -59,12 +62,35 @@ namespace TaxSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditUserModel model)
         {
-            if (!ModelState.IsValid)
+            string username = sanitizer.Sanitize(model.Username);
+            string firstName = sanitizer.Sanitize(model.FirstName);
+            string lastName = sanitizer.Sanitize(model.LastName);
+            string email = sanitizer.Sanitize(model.Email);
+            string phoneNumber = sanitizer.Sanitize(model.PhoneNumber);
+
+            if (!ModelState.IsValid ||
+                username == null || 
+                firstName == null || 
+                lastName == null || 
+                email == null || 
+                phoneNumber == null)
             {
                 return View();
             }
 
-            await _adminService.EditUser(model);
+            EditUserModel validModel = new EditUserModel()
+            {
+                Id = model.Id,
+                Username = username,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                PhoneNumber = phoneNumber,
+                Roles = model.Roles,
+                RoleName = model.RoleName
+            };
+
+            await _adminService.EditUser(validModel);
 
             return RedirectToAction(nameof(AllUsers));
         }

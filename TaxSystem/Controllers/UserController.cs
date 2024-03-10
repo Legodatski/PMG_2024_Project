@@ -6,6 +6,7 @@ using TaxSystem.Data;
 using TaxSystem.Models.Requests;
 using TaxSystem.Models.User;
 using System.Web;
+using Ganss.Xss;
 
 namespace TaxSystem.Controllers
 {
@@ -15,7 +16,8 @@ namespace TaxSystem.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private IRequestService requestService;
-        private IAmenityService Amenity;
+        private IAmenityService amenityService;
+        private HtmlSanitizer sanitizer;
 
         public UserController(
             UserManager<ApplicationUser> userManager,
@@ -27,7 +29,8 @@ namespace TaxSystem.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
             requestService = _requestService;
-            Amenity = _service;
+            amenityService = _service;
+            sanitizer = new HtmlSanitizer();
         }
 
         [AllowAnonymous]
@@ -38,7 +41,12 @@ namespace TaxSystem.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            if (!ModelState.IsValid)
+            string email = sanitizer.Sanitize(model.Email);
+            string password = sanitizer.Sanitize(model.Password);
+
+            if (!ModelState.IsValid ||
+                email == null ||
+                password == null)
             {
                 return View(model);
             }
@@ -67,9 +75,20 @@ namespace TaxSystem.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            if (!ModelState.IsValid)
+            string username = sanitizer.Sanitize(model.Username);
+            string firstName = sanitizer.Sanitize(model.FirstName);
+            string lastName = sanitizer.Sanitize(model.LastName);
+            string email = sanitizer.Sanitize(model.Email);
+            string phoneNumber = sanitizer.Sanitize(model.PhoneNumber);
+
+            if (!ModelState.IsValid ||
+                username == null ||
+                firstName == null ||
+                lastName == null ||
+                email == null ||
+                phoneNumber == null)
             {
-                return View(model);
+                return View();
             }
 
             ApplicationUser user = new ApplicationUser()
@@ -100,7 +119,7 @@ namespace TaxSystem.Controllers
         public IActionResult RequestSer()
         {
             var model = new AddRequestViewModel();
-            model.Services = Amenity.GetServiceNames();
+            model.Services = amenityService.GetServiceNames();
             return View(model);
         }
 
