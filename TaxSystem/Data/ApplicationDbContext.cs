@@ -42,14 +42,6 @@ namespace TaxSystem.Data
         private void AlterUser(ModelBuilder builder)
         {
             builder.Entity<ApplicationUser>()
-                .Property(x => x.UserName)
-                .IsRequired(true);
-
-            builder.Entity<ApplicationUser>()
-                .Property(x => x.Email)
-                .IsRequired(true);
-
-            builder.Entity<ApplicationUser>()
                 .Property(x => x.PhoneNumber)
                 .IsRequired(true);
         }

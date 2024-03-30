@@ -10,7 +10,7 @@ namespace TaxSystem.Data
             Desks = new List<DeskAmenity>();
         }
 
-        [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
+        [Key]
         public int Id { get; set; }
 
         [Required(ErrorMessage = GlobalConstants.RequiredErrorMsg)]
@@ -27,7 +27,5 @@ namespace TaxSystem.Data
 
         [Required]
         public ICollection<DeskAmenity> Desks { get; set; }
-
-
     }
 }

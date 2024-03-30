@@ -31,9 +31,11 @@ namespace TaxSystem.Services
             var Amenity = await context.Services.FindAsync(id);
 
             if (Amenity != null)
+            {
                 context.Services.Remove(Amenity);
 
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
         }
 
         public async Task Edit(Amenity model)
@@ -73,7 +75,7 @@ namespace TaxSystem.Services
 
                 var desksIds = s.Desks.Select(x => x.DeskId.ToString()).ToList();
                 toAdd.DeskIds = desksIds;
-                
+
                 var workerFirstNames = s.Desks.Select(x => x.Desk.Worker.FirstName).ToList();
                 toAdd.WorkerFirstNames = workerFirstNames;
 

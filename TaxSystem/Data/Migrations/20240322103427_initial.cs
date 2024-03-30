@@ -11,18 +11,6 @@ namespace TaxSystem.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "UserName",
-                table: "AspNetUsers",
-                type: "nvarchar(256)",
-                maxLength: 256,
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(256)",
-                oldMaxLength: 256,
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
@@ -32,31 +20,12 @@ namespace TaxSystem.Data.Migrations
                 oldType: "nvarchar(max)",
                 oldNullable: true);
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Email",
-                table: "AspNetUsers",
-                type: "nvarchar(256)",
-                maxLength: 256,
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(256)",
-                oldMaxLength: 256,
-                oldNullable: true);
-
             migrationBuilder.AddColumn<string>(
                 name: "FirstName",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
-
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDeleted",
-                table: "AspNetUsers",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
 
             migrationBuilder.AddColumn<string>(
                 name: "LastName",
@@ -71,8 +40,7 @@ namespace TaxSystem.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    WorkerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    WorkerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,8 +61,7 @@ namespace TaxSystem.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RequiredHours = table.Column<double>(type: "float", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    RequiredMinutes = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -132,9 +99,10 @@ namespace TaxSystem.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ServiceId = table.Column<int>(type: "int", nullable: false),
+                    AmenityId = table.Column<int>(type: "int", nullable: false),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DeskId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -152,8 +120,8 @@ namespace TaxSystem.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Requests_Services_ServiceId",
-                        column: x => x.ServiceId,
+                        name: "FK_Requests_Services_AmenityId",
+                        column: x => x.AmenityId,
                         principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -170,6 +138,11 @@ namespace TaxSystem.Data.Migrations
                 column: "DeskId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Requests_AmenityId",
+                table: "Requests",
+                column: "AmenityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Requests_ClientId",
                 table: "Requests",
                 column: "ClientId");
@@ -178,11 +151,6 @@ namespace TaxSystem.Data.Migrations
                 name: "IX_Requests_DeskId",
                 table: "Requests",
                 column: "DeskId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Requests_ServiceId",
-                table: "Requests",
-                column: "ServiceId");
         }
 
         /// <inheritdoc />
@@ -205,22 +173,8 @@ namespace TaxSystem.Data.Migrations
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
-                name: "IsDeleted",
-                table: "AspNetUsers");
-
-            migrationBuilder.DropColumn(
                 name: "LastName",
                 table: "AspNetUsers");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "UserName",
-                table: "AspNetUsers",
-                type: "nvarchar(256)",
-                maxLength: 256,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(256)",
-                oldMaxLength: 256);
 
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",
@@ -229,16 +183,6 @@ namespace TaxSystem.Data.Migrations
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Email",
-                table: "AspNetUsers",
-                type: "nvarchar(256)",
-                maxLength: 256,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(256)",
-                oldMaxLength: 256);
         }
     }
 }

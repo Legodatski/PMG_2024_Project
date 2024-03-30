@@ -12,8 +12,8 @@ using TaxSystem.Data;
 namespace TaxSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240309184639_removeIsDeletedBool")]
-    partial class removeIsDeletedBool
+    [Migration("20240322103427_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,6 +162,31 @@ namespace TaxSystem.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("TaxSystem.Data.Amenity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequiredMinutes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Services");
+                });
+
             modelBuilder.Entity("TaxSystem.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -175,7 +200,6 @@ namespace TaxSystem.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -221,7 +245,6 @@ namespace TaxSystem.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -257,7 +280,7 @@ namespace TaxSystem.Data.Migrations
                     b.ToTable("Desks");
                 });
 
-            modelBuilder.Entity("TaxSystem.Data.DesksServices", b =>
+            modelBuilder.Entity("TaxSystem.Data.DeskAmenity", b =>
                 {
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
@@ -280,6 +303,9 @@ namespace TaxSystem.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AmenityId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ClientId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -290,47 +316,19 @@ namespace TaxSystem.Data.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ServiceId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Time")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AmenityId");
+
                     b.HasIndex("ClientId");
 
                     b.HasIndex("DeskId");
 
-                    b.HasIndex("ServiceId");
-
                     b.ToTable("Requests");
-                });
-
-            modelBuilder.Entity("TaxSystem.Data.Amenity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequiredMinutes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -395,10 +393,10 @@ namespace TaxSystem.Data.Migrations
                     b.Navigation("Worker");
                 });
 
-            modelBuilder.Entity("TaxSystem.Data.DesksServices", b =>
+            modelBuilder.Entity("TaxSystem.Data.DeskAmenity", b =>
                 {
                     b.HasOne("TaxSystem.Data.Desk", "Desk")
-                        .WithMany("Services")
+                        .WithMany("Amenities")
                         .HasForeignKey("DeskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -409,13 +407,19 @@ namespace TaxSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Desk");
-
                     b.Navigation("Amenity");
+
+                    b.Navigation("Desk");
                 });
 
             modelBuilder.Entity("TaxSystem.Data.Request", b =>
                 {
+                    b.HasOne("TaxSystem.Data.Amenity", "Amenity")
+                        .WithMany()
+                        .HasForeignKey("AmenityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TaxSystem.Data.ApplicationUser", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
@@ -428,29 +432,23 @@ namespace TaxSystem.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TaxSystem.Data.Amenity", "Amenity")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Amenity");
 
                     b.Navigation("Client");
 
                     b.Navigation("Desk");
-
-                    b.Navigation("Amenity");
-                });
-
-            modelBuilder.Entity("TaxSystem.Data.Desk", b =>
-                {
-                    b.Navigation("Requests");
-
-                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("TaxSystem.Data.Amenity", b =>
                 {
                     b.Navigation("Desks");
+                });
+
+            modelBuilder.Entity("TaxSystem.Data.Desk", b =>
+                {
+                    b.Navigation("Amenities");
+
+                    b.Navigation("Requests");
                 });
 #pragma warning restore 612, 618
         }
