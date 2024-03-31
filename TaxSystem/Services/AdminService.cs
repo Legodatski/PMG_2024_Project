@@ -11,7 +11,7 @@ namespace TaxSystem.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext context;
         private const string adminId = "35bbae7d-b2a0-472a-8137-e8df5f4ac614";
-        private const string adminRoleId = "3d7c794e-daf1-422c-b5d6-ea9934ed597d";
+        private const string adminRoleName = "Admin";
 
         public AdminService(UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
@@ -77,7 +77,7 @@ namespace TaxSystem.Services
         }
 
         public IEnumerable<IdentityRole> GetAllRoles()
-            => context.Roles.Where(x => x.Id != adminRoleId);
+            => context.Roles.Where(x => x.Name != adminRoleName);
 
         public async Task EditUser(EditUserModel model)
         {
@@ -107,10 +107,14 @@ namespace TaxSystem.Services
         public async Task DeleteUser(string id)
         {
             var user = await context.Users.FindAsync(id);
+            var requests = await context.Requests.AnyAsync(x => x.ClientId == user.Id);
+            var desks = await context.Desks.AnyAsync(x => x.WorkerId == user.Id);
 
-             context.Users.Remove(user);
-
-            await context.SaveChangesAsync();
+            if (!requests && !desks)
+            {
+                context.Users.Remove(user);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

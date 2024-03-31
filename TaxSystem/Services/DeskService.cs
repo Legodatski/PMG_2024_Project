@@ -125,5 +125,18 @@ namespace TaxSystem.Services
             _context.DeskService.Remove(toDel);
             await _context.SaveChangesAsync();
         }
+
+        public async Task Delete(int id)
+        {
+            var desk = await _context.Desks.FirstOrDefaultAsync(_ => _.Id == id);
+
+            var requests = await _context.Requests.AnyAsync(x => x.DeskId == id);
+
+            if (!requests)
+            {
+                _context.Desks.Remove(desk);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

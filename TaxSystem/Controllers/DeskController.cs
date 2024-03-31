@@ -105,7 +105,14 @@ namespace TaxSystem.Controllers
                 return View();
             }
 
-           await _deskService.RemoveDesksSer(model.DeskId, model.ServiceName);
+            await _deskService.RemoveDesksSer(model.DeskId, model.ServiceName);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _deskService.Delete(id);
 
             return RedirectToAction(nameof(All));
         }
