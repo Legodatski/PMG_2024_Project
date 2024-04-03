@@ -32,14 +32,14 @@ namespace TaxSystem.Services
 
             if (requests.Any())
             {
-                requests = requests.OrderByDescending(x => x.Time);
+                time = LastTime(requests.Select(x => x.Time).ToArray());
+                var request = await requests.FirstOrDefaultAsync(x => x.Time == time.ToString());
+                var ser = context.Services.FirstOrDefault(x => x.Id == request.AmenityId);
 
-                string tInput = requests.First().Time;
 
-                time = StringToTime(tInput);
-
-                time = time.AddMinutes(double.Parse(Amenity.RequiredMinutes));
                 time = time.AddMinutes(5);
+                time = time.AddMinutes(double.Parse(ser.RequiredMinutes));
+
 
                 if (time.Hour == 12)
                 {
@@ -55,7 +55,7 @@ namespace TaxSystem.Services
                 time = new TimeOnly(8, 0);
             }
 
-            var request = new Request()
+            var newRequest = new Request()
             {
                 Desk = desk,
                 DeskId = desk.Id,
@@ -67,7 +67,7 @@ namespace TaxSystem.Services
                 Time = time.ToString(),
             };
 
-            await context.Requests.AddAsync(request);
+            await context.Requests.AddAsync(newRequest);
             await context.SaveChangesAsync();
         }
 
@@ -163,6 +163,23 @@ namespace TaxSystem.Services
             var time = new TimeOnly(int.Parse(input[0]), int.Parse(input[1]));
 
             return time;
+        }
+
+        private TimeOnly LastTime(string[] input)
+        {
+            TimeOnly mTime = new TimeOnly(8,0);
+
+            foreach (var c in input)
+            {
+                TimeOnly curTime = TimeOnly.Parse(c);
+
+                if (mTime <= curTime)
+                {
+                    mTime = curTime;
+                }
+            }
+
+            return mTime;
         }
     }
 }
