@@ -84,38 +84,36 @@ namespace TaxSystem.Services
         {
             var services = await context.Services.ToArrayAsync();
             var request = await context.Requests.FirstOrDefaultAsync(x => x.Id == id);
-            var allrequests = context.Requests.Where(x => x.DeskId == request.DeskId).ToArray();
-
-            var delTime = StringToTime(request.Time);
-            var serTime = double.Parse(request.Amenity.RequiredMinutes);
 
             if (request != null)
-                context.Requests.Remove(request);
-
-            foreach (var r in allrequests)
             {
-                var time = StringToTime(r.Time);
+                var allrequests = context.Requests.Where(x => x.DeskId == request.DeskId).ToArray();
+                var nextRequests = allrequests.Where(x => x.Id >= id).ToList();
+                nextRequests = nextRequests.OrderBy(x => x.Id).ToList();
+                List<Request> newR = new List<Request>();
 
-                if (time > delTime)
+                if (nextRequests != null)
                 {
-                    time = time.AddMinutes(-serTime);
-                    time = time.AddMinutes(-5);
-
-                    if (time.Hour == 12)
+                    for (int i = 1; i < nextRequests.Count; i++)
                     {
-                        time = new TimeOnly(11, time.Minute);
+                        newR.Add(new Request
+                        {
+                            Id = nextRequests[i].Id,
+                            DeskId = nextRequests[i].DeskId,
+                            AmenityId = nextRequests[i].AmenityId,
+                            ClientId = nextRequests[i].ClientId,
+                            IsCompleted = nextRequests[i].IsCompleted,
+                            Time = nextRequests[i - 1].Time
+                        });
                     }
-
-                    if (allrequests.Select(x=>x.Time).Contains(time.ToString()))
-                    {
-                        time = time.AddMinutes(serTime);
-                    }
-
-                    r.Time = time.ToString();
                 }
+
+                context.RemoveRange(nextRequests);
+                await context.AddRangeAsync(newR);
+
+                await context.SaveChangesAsync();
             }
 
-            await context.SaveChangesAsync();
         }
 
         public IEnumerable<Request> GetUserRequests(
