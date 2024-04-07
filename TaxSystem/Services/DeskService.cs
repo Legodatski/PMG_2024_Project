@@ -114,7 +114,7 @@ namespace TaxSystem.Services
         }
 
         public async Task<Desk> GetDeskByWorkerId(string id) 
-            => await _context.Desks.FirstOrDefaultAsync(x => x.WorkerId == id);
+            => await _context.Desks.FirstOrDefaultAsync(x => x.Worker.UserName == id);
 
         public async Task RemoveDesksSer(int deskId, string serName)
         {

@@ -23,9 +23,8 @@ namespace TaxSystem.Controllers
         public async Task<IActionResult> RequestsByWorker(bool? completed)
         {
             var userName = HttpContext.User.Identity.Name;
-            var User = await userManager.FindByNameAsync(userName);
 
-            var desk = await deskService.GetDeskByWorkerId(User.Id);
+            var desk = await deskService.GetDeskByWorkerId(userName);
 
             var model = requestService.GetWorkerRequests(desk.Id, completed);
 
