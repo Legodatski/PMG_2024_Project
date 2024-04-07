@@ -5,6 +5,7 @@ using NuGet.Protocol;
 using System.ComponentModel.Design.Serialization;
 using TaxSystem.Contracts;
 using TaxSystem.Data;
+using TaxSystem.Extensions;
 using TaxSystem.Models.Requests;
 
 namespace TaxSystem.Services
@@ -25,7 +26,7 @@ namespace TaxSystem.Services
 
             if (desks.Count() == 0)
             {
-                return "Няма подходящо бюро за изпъление на услугата.";
+                return GlobalConstants.InvalidDesk;
             }
 
             desks = desks.OrderBy(x => x.Requests.Count());
@@ -54,7 +55,7 @@ namespace TaxSystem.Services
 
                 if (estimateTime.Hour >= 17)
                 {
-                    return "Работници не са свободни да изпълнят услугата.";
+                    return GlobalConstants.InvalidTime;
                 }
             }
             else

@@ -16,5 +16,7 @@
 
         //Errors
         public const string RequiredErrorMsg = "Задължително попълване на полето.";
+        public const string InvalidDesk = "Няма подходящо бюро за изпъление на услугата.";
+        public const string InvalidTime = "Работници не са свободни да изпълнят услугата.";
     }
 }
