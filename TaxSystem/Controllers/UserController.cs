@@ -137,7 +137,13 @@ namespace TaxSystem.Controllers
 
             model.User = User;
 
-            await requestService.Add(model);
+            string? result = await requestService.Add(model);
+
+            if (result != null)
+            {
+                TempData["Error"] = result;
+                return RedirectToAction("Error", "Home");
+            }
 
             return RedirectToAction("All");
         }

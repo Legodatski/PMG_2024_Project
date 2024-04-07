@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Razor.Language.CodeGeneration;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
 using System.ComponentModel.Design.Serialization;
@@ -17,13 +18,17 @@ namespace TaxSystem.Services
             this.context = context;
         }
 
-        public async Task Add(AddRequestViewModel model)
+        public async Task<string> Add(AddRequestViewModel model)
         {
             var Amenity = await context.Services.FirstOrDefaultAsync(x => x.Name == model.ServiceName);
             var desks = context.DeskService.Where(x => x.Amenity == Amenity).Select(y => y.Desk);
 
-            desks = desks.OrderBy(x => x.Requests.Count());
+            if (desks.Count() == 0)
+            {
+                return "Няма подходящо бюро за изпъление на услугата.";
+            }
 
+            desks = desks.OrderBy(x => x.Requests.Count());
             var desk = desks.First();
 
             var requests = context.Requests.Where(x => x.DeskId == desk.Id);
@@ -36,18 +41,20 @@ namespace TaxSystem.Services
                 var request = await requests.FirstOrDefaultAsync(x => x.Time == time.ToString());
                 var ser = context.Services.FirstOrDefault(x => x.Id == request.AmenityId);
 
-
                 time = time.AddMinutes(5);
                 time = time.AddMinutes(double.Parse(ser.RequiredMinutes));
-
 
                 if (time.Hour == 12)
                 {
                     time = new TimeOnly(13, 0);
                 }
-                else if (time.Hour >= 17)
+
+                TimeOnly estimateTime = time;
+                estimateTime.AddMinutes(double.Parse(Amenity.RequiredMinutes));
+
+                if (estimateTime.Hour >= 17)
                 {
-                    throw new Exception("бюрото не работи");
+                    return "Работници не са свободни да изпълнят услугата.";
                 }
             }
             else
@@ -69,6 +76,7 @@ namespace TaxSystem.Services
 
             await context.Requests.AddAsync(newRequest);
             await context.SaveChangesAsync();
+            return null;
         }
 
         public bool CheckIfUserHasRequests(string userId)

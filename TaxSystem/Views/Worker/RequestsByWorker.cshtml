@@ -39,9 +39,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.IsCompleted)
             </td>
-            <td>
-                <a asp-action="Complete" asp-route-id="@item.Id" method="post">Завърши услугата</a>
-            </td>
+            @if (item.IsCompleted == false)
+                {
+                    <td>
+                        <a asp-action="Complete" asp-route-id="@item.Id" method="post">Завърши услугата</a>
+                    </td>
+
+                }
         </tr>
 }
     </tbody>

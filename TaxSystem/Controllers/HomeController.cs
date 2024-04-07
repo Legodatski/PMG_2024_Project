@@ -19,9 +19,14 @@ namespace TaxSystem.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(string errorMsg)
+        public IActionResult Error()
         {
-            return View(errorMsg);
+            if (TempData["Error"] != null)
+            {
+                string errorMsg = TempData["Error"].ToString();
+                ViewBag.Error = errorMsg;
+            }
+            return View();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace TaxSystem.Contracts
 {
     public interface IRequestService
     {
-        public Task Add(AddRequestViewModel model);
+        public Task<string> Add(AddRequestViewModel model);
 
         public IEnumerable<Request> GetUserRequests(ApplicationUser user, bool? completed = null);
 

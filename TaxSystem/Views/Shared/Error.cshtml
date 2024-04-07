@@ -1,11 +1,15 @@
-﻿@model string
-@{
+﻿@{
     ViewData["Title"] = "Error";
 }
 
-<h2 class="text-danger">Възникна грешка при ползването на приложението</h2>
-
-@if (Model != null)
+@if (ViewBag.Error != null)
+{   
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.Error
+    </div>
+}
+else
 {
-    <h4>@Model</h4>
+
+    <h2 class="text-danger">Възникна грешка при ползването на приложението</h2>
 }
